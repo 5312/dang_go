@@ -1,0 +1,13 @@
+DB:
+  AutoCreateTable: true
+  Driver: "mysql"
+  DriverName: "cool"
+  Host: "118.178.180.247"
+  Port: "3306"
+  User: "cool"
+  Password: "4KMCSR8DGGF58kW2"
+  Charset: "utf8mb4"
+Conf:
+  AppName: "dang_go"
+  Host: "127.0.0.1"
+  Port: "86"
