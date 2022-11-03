@@ -3,22 +3,34 @@ package main
 import (
 	"fmt"
 
+	"com.example.dang/api"
 	"com.example.dang/config"
+	"com.example.dang/internal/model"
 	"github.com/kataras/iris/v12"
+	"github.com/spf13/viper"
 )
 
 func main() {
 	fmt.Println("|---------------------------|")
 	fmt.Println("|----------admin------------|")
 	fmt.Println("|---------------------------|")
-
+	/* 初始化iris */
 	app := iris.Default()
 
-	config.InitConfig()
+	// config.InitConfig()
+	c := config.DbConfig{}
+	c.InitConfig()
 
-	app.Get("/", func(ctx iris.Context) {
-		ctx.HTML("html")
-	})
+	// 初始化数据库
+	model.InitGormDB()
 
-	app.Run(iris.Addr(":86"))
+	// 注册路由 中间件
+	api.InitUser(app)
+
+	// 读取conf
+	str := ":"
+	port := viper.Get("Conf.Port")
+	res := fmt.Sprintf("%s%s", str, port)
+	app.Run(iris.Addr(res))
+
 }

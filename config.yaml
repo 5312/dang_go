@@ -1,7 +1,7 @@
 DB:
   AutoCreateTable: true
   Driver: "mysql"
-  DriverName: "cool"
+  DriverName: "dang"
   Host: "118.178.180.247"
   Port: "3306"
   User: "cool"

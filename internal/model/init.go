@@ -4,26 +4,27 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/spf13/viper"
+	"com.example.dang/config"
+	"com.example.dang/internal/model/system"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
-func InitDatasource() (err error) {
+func InitGormDB() *gorm.DB {
 	// 读取db配置
-	user := viper.Get("DB.User")
-	password := viper.Get("DB.Password")
-	host := viper.Get("DB.Host")
-	port := viper.Get("DB.Port")
-	driverName := viper.Get("DB.DriverName")
-	charset := viper.Get("DB.Charset")
+	c := config.GetConfig()
 
-	dsn := fmt.Sprintf("%s%s%s%s%s%s%s%s%s%s%s%s%s", user, ":", password, "@tcp(", host, ":", port, ")", "/", driverName, "?charset=", charset, "&parseTime=True&loc=Local")
+	dsn := fmt.Sprintf("%s%s%s%s%s%s%s%s%s%s%s%s%s", c.User, ":", c.Password, "@tcp(", c.Host, ":", c.Port, ")", "/", c.DriverName, "?charset=", c.Charset, "&parseTime=True&loc=Local")
+
+	mysqlConfig := mysql.Config{
+		DSN:                       dsn,   // DSN data source name
+		DefaultStringSize:         256,   // string 类型字段的默认长度
+		SkipInitializeWithVersion: false, // 根据当前 MySQL 版本自动配置
+	}
+
 	// fmt.Printf("dsn: %v\n", dsn)
 	// 连接云服务器 mysql
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{})
 
 	if err != nil {
 		fmt.Print("\n", "db", DB)
@@ -49,12 +50,11 @@ func InitDatasource() (err error) {
 
 	//自动迁移表
 	tableInit(DB)
-	// 关闭链接
-	//defer sqlDB.Close()
-	return
+
+	return DB
 }
 
 func tableInit(db *gorm.DB) {
-	// ims_sys_log 日志表
-	// db.AutoMigrate(&models.TakeSysLog{})
+	// 菜单表
+	db.AutoMigrate(&system.Menus{})
 }

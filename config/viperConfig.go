@@ -19,7 +19,8 @@ type DbConfig struct {
 	Charset         string `yaml:"Charset"`
 }
 
-func InitConfig() {
+/* 初始化配置文件 */
+func (d *DbConfig) InitConfig() {
 	viper.SetConfigFile("../config.yaml") // 指定配置文件路径
 	viper.SetConfigName("config")         // 配置文件名称(无扩展名)
 	viper.SetConfigType("yaml")           // 如果配置文件的名称中没有扩展名，则需要配置此项
@@ -31,4 +32,25 @@ func InitConfig() {
 	if err != nil {             // 处理读取配置文件的错误
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
+}
+
+func GetConfig() *DbConfig {
+	// 读取配置文件
+	user := viper.GetString("DB.User")
+	password := viper.GetString("DB.Password")
+	host := viper.GetString("DB.Host")
+	port := viper.GetString("DB.Port")
+	driverName := viper.GetString("DB.DriverName")
+	charset := viper.GetString("DB.Charset")
+
+	// 返回结构体
+	msyqlConfig := &DbConfig{
+		User:       user,
+		Password:   password,
+		Port:       port,
+		Host:       host,
+		DriverName: driverName,
+		Charset:    charset,
+	}
+	return msyqlConfig
 }
