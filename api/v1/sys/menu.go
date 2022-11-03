@@ -1,6 +1,7 @@
-package router
+package sys
 
 import (
+	"com.example.dang/controller"
 	"github.com/kataras/iris/v12"
 )
 
@@ -12,13 +13,8 @@ func RegisterRoute(app *iris.Application) {
 	v1 := app.Party("/v1")
 
 	// 简单分组: v1.
-	/* api := v1.Party("/api")
+	api := v1.Party("/api")
 	{
-		api.Get("/", controller.Users)
+		api.Get("/", controller.Menu)
 	}
-
-	admin := v1.Party("/admin")
-	{
-		admin.Get("/", controller.Users)
-	} */
 }
