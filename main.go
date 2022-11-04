@@ -27,6 +27,11 @@ func main() {
 	// 注册路由 中间件
 	api.InitUser(app)
 
+	// 5 注册view  默认静态页面
+	tmpl := iris.HTML("./web/static", ".html")
+	tmpl.Reload(true)
+	app.RegisterView(tmpl)
+
 	// 读取conf
 	str := ":"
 	port := viper.Get("Conf.Port")
