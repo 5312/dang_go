@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Menus struct {
+type Menu struct {
 	gorm.Model
 	Name       string `json:"name" gorm:"comment:菜单name"`
 	Parent_id  int    `json:"parent_id" gorm:"comment:父id"`

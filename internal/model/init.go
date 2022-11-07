@@ -57,7 +57,6 @@ func InitGormDB() *gorm.DB {
 func tableInit(db *gorm.DB) {
 	// 菜单表
 	// 创建表时添加后缀
-	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&system.Menus{})
+	db.AutoMigrate(&system.Menu{})
 
-	// db.AutoMigrate(&system.Menus{})
 }
