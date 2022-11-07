@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -10,7 +11,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitGormDB() *gorm.DB {
+var DB *gorm.DB
+
+func InitGormDB() *sql.DB {
 	// 读取db配置
 	c := config.GetConfig()
 
@@ -24,34 +27,36 @@ func InitGormDB() *gorm.DB {
 
 	// fmt.Printf("dsn: %v\n", dsn)
 	// 连接云服务器 mysql
-	DB, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{})
+	db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{})
+
+	DB = db
 
 	if err != nil {
-		fmt.Print("\n", "db", DB)
+		fmt.Print("\n", "db", db)
 		fmt.Print("\n", "-----------------")
 		fmt.Print("\n", "err", err)
 		fmt.Print("\n", "链接数据库失败")
 		panic(err)
 	}
 	// 链接池
-	sqlDB, err := DB.DB()
+	sqldb, err := db.DB()
 	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
-	sqlDB.SetMaxIdleConns(10)
+	sqldb.SetMaxIdleConns(10)
 
 	// SetMaxOpenConns 设置打开数据库连接的最大数量。
-	sqlDB.SetMaxOpenConns(100)
+	sqldb.SetMaxOpenConns(100)
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
-	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqldb.SetConnMaxLifetime(time.Hour)
 
-	if err = sqlDB.Ping(); err != nil {
+	if err = sqldb.Ping(); err != nil {
 		panic(err)
 	}
 
 	//自动迁移表
-	tableInit(DB)
+	tableInit(db)
 
-	return DB
+	return sqldb
 }
 
 func tableInit(db *gorm.DB) {
