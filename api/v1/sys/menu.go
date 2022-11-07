@@ -10,7 +10,7 @@ import (
 func RegisterRoute(app *iris.Application) {
 	// 注册中间件
 
-	app.Get("/", controller.Menu)
+	// app.Get("/", controller.Menu)
 
 	v1 := app.Party("/v1")
 
