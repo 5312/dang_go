@@ -7,5 +7,7 @@ import (
 
 // 初始化api接口
 func InitUser(app *iris.Application) {
-	sys.RegisterRoute(app)
+	// V1
+	v1 := app.Party("/v1")
+	sys.RegisterRoute(v1)
 }

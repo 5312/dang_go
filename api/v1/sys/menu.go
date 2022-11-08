@@ -2,18 +2,14 @@ package sys
 
 import (
 	"com.example.dang/controller"
-	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/core/router"
 )
 
 // 路由
 
-func RegisterRoute(app *iris.Application) {
-	// 注册中间件
-
-	v1 := app.Party("/v1")
-
-	// 简单分组: v1.
-	api := v1.Party("/sys")
+func RegisterRoute(app router.Party) {
+	// system 组
+	api := app.Party("/sys")
 	{
 		api.Get("/menus", controller.Menu)
 	}

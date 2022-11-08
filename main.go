@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
-
+	// 本地包
 	"com.example.dang/api"
 	"com.example.dang/config"
 	"com.example.dang/internal/model"
+	"com.example.dang/middleware"
+
+	// 第三方
 	"github.com/kataras/iris/v12"
 	"github.com/spf13/viper"
 )
@@ -17,6 +20,9 @@ func main() {
 	/* 初始化iris */
 	app := iris.Default()
 
+	/* 中间件 */
+	// app.Use(middleware.Cors) // 跨域
+	app.UseGlobal(middleware.Cors)
 	// config.InitConfig()
 	c := config.DbConfig{}
 	c.InitConfig()
