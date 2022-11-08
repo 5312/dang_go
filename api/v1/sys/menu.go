@@ -12,5 +12,6 @@ func RegisterRoute(app router.Party) {
 	api := app.Party("/sys")
 	{
 		api.Get("/menus", controller.Menu)
+		api.Delete("/menus/{ID:int}", controller.DeleteMenu)
 	}
 }

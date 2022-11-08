@@ -4,6 +4,7 @@ import (
 	// go 标准包
 
 	// 内部包
+
 	"com.example.dang/internal/model"
 	"com.example.dang/internal/model/system"
 
@@ -44,4 +45,18 @@ func Menu(ctx iris.Context) {
 	}
 	ctx.JSON(res)
 
+}
+
+func DeleteMenu(ctx iris.Context) {
+	id := ctx.Params().GetInt64Default("ID", 0)
+	err := model.DB.Delete(&system.Menu{}, id).Error
+	if err != nil {
+		ctx.JSON(iris.Map{
+			"success": false,
+		})
+		return
+	}
+	ctx.JSON(iris.Map{
+		"success": true,
+	})
 }
