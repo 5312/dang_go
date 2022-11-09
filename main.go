@@ -22,7 +22,7 @@ func main() {
 
 	/* 中间件 */
 	// app.Use(middleware.Cors) // 跨域 !!! 失效
-	app.UseGlobal(middleware.Cors)
+	app.Use(middleware.Cors)
 
 	// config.InitConfig()
 	c := DbConfig{}
