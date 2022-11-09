@@ -1,4 +1,4 @@
-module com.example.dang
+module dang_go
 
 go 1.19
 

@@ -5,8 +5,8 @@ import (
 
 	// 内部包
 
-	"com.example.dang/internal/model"
-	"com.example.dang/internal/model/system"
+	"dang_go/internal/model"
+	"dang_go/internal/model/system"
 
 	// 第三方包
 	"github.com/kataras/iris/v12"

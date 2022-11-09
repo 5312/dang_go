@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	// 本地包
-	. "com.example.dang/api"
-	. "com.example.dang/config"
-	. "com.example.dang/internal/model"
-	"com.example.dang/middleware"
+	. "dang_go/api"
+	. "dang_go/config"
+	. "dang_go/internal/model"
+	"dang_go/middleware"
 
 	// 第三方
 	"github.com/kataras/iris/v12"

@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"com.example.dang/config"
-	"com.example.dang/internal/model/system"
+	"dang_go/config"
+	"dang_go/internal/model/system"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

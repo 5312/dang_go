@@ -1,7 +1,8 @@
 package sys
 
 import (
-	"com.example.dang/controller"
+	"dang_go/controller"
+
 	"github.com/kataras/iris/v12/core/router"
 )
 

@@ -1,7 +1,8 @@
 package api
 
 import (
-	"com.example.dang/api/v1/sys"
+	"dang_go/api/v1/sys"
+
 	"github.com/kataras/iris/v12"
 )
 

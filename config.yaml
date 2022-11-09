@@ -10,4 +10,4 @@ DB:
 Conf:
   AppName: "dang_go"
   Host: "127.0.0.1"
-  Port: "86"
+  Port: "87"
