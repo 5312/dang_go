@@ -8,7 +8,7 @@ type TablePage struct {
 	Limit int   `json:"limit"`
 }
 
-// 必反字段
+// 必返字段
 type Res struct {
 	Success bool   `json:"success"`
 	Code    int    `json:"code" t:"0成功1失败"`
@@ -18,9 +18,15 @@ type Res struct {
 // 成功
 type Response struct {
 	*Res
-	Data []system.Menu `json:"data"`
+	Data []TreeResponse `json:"data"`
 	// Table   *TablePage    `json:"table"`
 	*TablePage
+}
+
+// 树结构
+type TreeResponse struct {
+	*system.Menu
+	Children []TreeResponse `json:"children"`
 }
 
 // 失败

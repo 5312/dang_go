@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	// 第三方包
+	"github.com/gogf/gf/util/gconv"
 	"github.com/kataras/iris/v12"
 )
 
@@ -51,15 +52,19 @@ func (m *Menu) AddMenu(ctx iris.Context) {
 
 func (m *Menu) GetListMenu(ctx iris.Context) {
 	// Get all records
-	var results []system.Menu //[]map[string]interface{}
+	var results []*system.Menu //[]map[string]interface{}
+	// 从 t 中获取 返回行数 RowsAfffected
 	t := model.DB.Table("menus").Find(&results)
+	a := TreeNode(results, 0)
+
+	fmt.Println(a)
 
 	res := Response{
 		Res: &Res{Success: true,
 			Code: 0,
 			Msg:  "请求成功",
 		},
-		Data: results,
+		Data: a,
 		TablePage: &TablePage{
 			Total: t.RowsAffected,
 		},
@@ -82,4 +87,24 @@ func (m *Menu) DeleteMenu(ctx iris.Context) {
 		"success": true,
 		"id":      id,
 	})
+}
+
+/* 转换树结构 */
+func TreeNode(list []*system.Menu, pid uint) []TreeResponse {
+	var array []TreeResponse
+
+	for _, item := range list {
+		// pid == 0 是第一层
+		if item.Parent_id == pid {
+			var children TreeResponse
+
+			err := gconv.Struct(item, &children)
+			if err != nil {
+				panic(err)
+			}
+			children.Children = TreeNode(list, item.ID)
+			array = append(array, children)
+		}
+	}
+	return array
 }

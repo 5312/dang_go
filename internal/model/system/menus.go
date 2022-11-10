@@ -7,7 +7,7 @@ import (
 type Menu struct {
 	gorm.Model
 	Name       string `json:"name" gorm:"comment:菜单name"`
-	Parent_id  int    `json:"parent_id" gorm:"comment:父id"`
+	Parent_id  uint   `json:"parent_id" gorm:"comment:父id"`
 	Icon       string `json:"icon" gorm:"comment:icon图标"`
 	Path       string `json:"path" gorm:"comment:api路径"`
 	Component  string `json:"component" gorm:"comment:组件径"`
