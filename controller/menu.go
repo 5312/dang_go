@@ -21,11 +21,31 @@ type CurdMenu interface {
 type Menu struct{}
 
 func (m *Menu) AddMenu(ctx iris.Context) {
-	path := ctx.Path()
-	fmt.Println("add")
+	// 接收参数
+	var creatMenu system.Menu
+	if err := ctx.ReadJSON(&creatMenu); err != nil {
+		// fmt.Println(creatMenu)
+		result := model.DB.Create(&creatMenu) // 通过数据的指针来创建
+		fmt.Printf("%v\n", result.Error)
+		if result.Error == nil {
+			ctx.JSON(Response{
+				Res: &Res{
+					Success: true,
+					Code:    0,
+					Msg:     "添加成功",
+				},
+			})
+			return
+		}
 
-	fmt.Println(path)
-	// ctx.JSON()
+	}
+	ctx.JSON(ResponseError{
+		Res: &Res{
+			Success: false,
+			Code:    1,
+			Msg:     "添加失败",
+		},
+	})
 
 }
 
@@ -35,10 +55,11 @@ func (m *Menu) GetListMenu(ctx iris.Context) {
 	t := model.DB.Table("menus").Find(&results)
 
 	res := Response{
-		Success: true,
-		Data:    results,
-		Code:    0,
-		Msg:     "请求成功",
+		Res: &Res{Success: true,
+			Code: 0,
+			Msg:  "请求成功",
+		},
+		Data: results,
 		TablePage: &TablePage{
 			Total: t.RowsAffected,
 		},
