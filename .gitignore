@@ -27,3 +27,7 @@ package-lock.json
 project.exe
 # ignore iris project file
 .iris.yml
+
+
+#
+*.exe
