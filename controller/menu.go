@@ -13,15 +13,19 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-type CurdMenu interface {
-	GetListMenu()
-	DeleteMenu()
-	AddMenu()
+type Curder interface {
+	AddMenu(ctx iris.Context)
+	DeleteMenu(ctx iris.Context)
+	UpMenu(ctx iris.Context)
+	GetListMenu(ctx iris.Context)
 }
 
-type Menu struct{}
+type Menus struct {
+	Name string
+}
 
-func (m *Menu) AddMenu(ctx iris.Context) {
+/* 增 */
+func (m *Menus) AddMenu(ctx iris.Context) {
 	// 接收参数
 	var creatMenu system.Menu
 	if err := ctx.ReadJSON(&creatMenu); err != nil {
@@ -49,17 +53,55 @@ func (m *Menu) AddMenu(ctx iris.Context) {
 			"Msg":     "添加失败",
 			"data":    arr,
 		})
-	/* 	ResponseError{
-		Res: &Res{
-			Success: true,
-			Code:    1,
-			Msg:     "添加失败",
-		},
-	} */
-
 }
 
-func (m *Menu) GetListMenu(ctx iris.Context) {
+/* 删 */
+func (m *Menus) DeleteMenu(ctx iris.Context) {
+	id := ctx.Params().GetInt64Default("ID", 0)
+
+	err := model.DB.Delete(&system.Menu{}, id).Error
+	if err != nil {
+		ctx.JSON(iris.Map{
+			"success": false,
+			"id":      id,
+			"msg":     "删除失败",
+		})
+		return
+	}
+	ctx.JSON(iris.Map{
+		"success": true,
+		"id":      id,
+		"msg":     "删除成功",
+	})
+}
+
+/* 改 */
+func (m *Menus) UpMenu(ctx iris.Context) {
+	id := ctx.Params().GetInt64Default("ID", 0)
+
+	var results []*system.Menu //[]map[string]interface{}
+	// 从 t 中获取 返回行数 RowsAfffected
+	t := model.DB.Table("menus").First(&results, id).Error
+
+	err := model.DB.Save(&results).Error
+
+	if err != nil && t != nil {
+		ctx.JSON(iris.Map{
+			"success": false,
+			"id":      id,
+			"msg":     "删除失败",
+		})
+		return
+	}
+	ctx.JSON(iris.Map{
+		"success": true,
+		"id":      id,
+		"msg":     "修改成功",
+	})
+}
+
+/* 查 */
+func (m *Menus) GetListMenu(ctx iris.Context) {
 	// Get all records
 	var results []*system.Menu //[]map[string]interface{}
 	// 从 t 中获取 返回行数 RowsAfffected
@@ -81,23 +123,16 @@ func (m *Menu) GetListMenu(ctx iris.Context) {
 	ctx.JSON(res)
 }
 
-func (m *Menu) DeleteMenu(ctx iris.Context) {
-	id := ctx.Params().GetInt64Default("ID", 0)
+/* 返回处理 */
+func backJson() interface{} {
 
-	err := model.DB.Delete(&system.Menu{}, id).Error
-	if err != nil {
-		ctx.JSON(iris.Map{
-			"success": false,
-			"id":      id,
-			"msg":     "删除失败",
-		})
-		return
+	res := Res{
+		Success: true,
+		Code:    0,
+		Msg:     "添加成功",
 	}
-	ctx.JSON(iris.Map{
-		"success": true,
-		"id":      id,
-		"msg":     "删除成功",
-	})
+
+	return res
 }
 
 /* 转换树结构 */

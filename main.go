@@ -6,7 +6,7 @@ import (
 	. "dang_go/api"
 	. "dang_go/config"
 	. "dang_go/internal/model"
-	"dang_go/middleware"
+	. "dang_go/middleware"
 
 	// 第三方
 	"github.com/kataras/iris/v12"
@@ -18,11 +18,11 @@ func main() {
 	fmt.Println("|----------admin------------|")
 	fmt.Println("|---------------------------|")
 	/* 初始化iris */
-	app := iris.Default()
+	app := iris.New()
 
 	/* 中间件 */
 	// app.Use(middleware.Cors) // 跨域 !!! 失效
-	app.Use(middleware.Cors)
+	app.Use(Cors)
 
 	// config.InitConfig()
 	c := DbConfig{}
