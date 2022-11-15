@@ -40,13 +40,22 @@ func (m *Menu) AddMenu(ctx iris.Context) {
 		}
 
 	}
-	ctx.JSON(ResponseError{
+	arr := []system.Menu{}
+	arr = append(arr, creatMenu)
+	ctx.JSON(
+		iris.Map{
+			"Success": true,
+			"Code":    1,
+			"Msg":     "添加失败",
+			"data":    arr,
+		})
+	/* 	ResponseError{
 		Res: &Res{
-			Success: false,
+			Success: true,
 			Code:    1,
 			Msg:     "添加失败",
 		},
-	})
+	} */
 
 }
 
@@ -80,12 +89,14 @@ func (m *Menu) DeleteMenu(ctx iris.Context) {
 		ctx.JSON(iris.Map{
 			"success": false,
 			"id":      id,
+			"msg":     "删除失败",
 		})
 		return
 	}
 	ctx.JSON(iris.Map{
 		"success": true,
 		"id":      id,
+		"msg":     "删除成功",
 	})
 }
 
@@ -102,7 +113,7 @@ func TreeNode(list []*system.Menu, pid uint) []TreeResponse {
 			if err != nil {
 				panic(err)
 			}
-			children.Children = TreeNode(list, item.ID)
+			children.Children = TreeNode(list, item.Model.ID)
 			array = append(array, children)
 		}
 	}
