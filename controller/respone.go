@@ -4,13 +4,11 @@ import "dang_go/internal/model/system"
 
 type TablePage struct {
 	Total int64 `json:"total"`
-	Page  int   `json:"page"`
-	Limit int   `json:"limit"`
 }
 
 // 必返字段
 type Res struct {
-	Success bool   `json:"success"`
+	Success bool   `json:"success" t:"请求成功"`
 	Code    int    `json:"code" t:"0成功1失败"`
 	Msg     string `json:"msg"`
 }
@@ -27,9 +25,4 @@ type Response struct {
 type TreeResponse struct {
 	*system.Menu
 	Children []TreeResponse `json:"children"`
-}
-
-// 失败
-type ResponseError struct {
-	*Res
 }

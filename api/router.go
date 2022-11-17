@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-// 初始化api接口
+// InitUser 初始化api接口
 func InitUser(app *iris.Application) {
 	// V1
 	v1 := app.Party("/v1")

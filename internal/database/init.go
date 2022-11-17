@@ -1,4 +1,4 @@
-package model
+package database
 
 import (
 	"database/sql"
@@ -6,15 +6,20 @@ import (
 	"time"
 
 	"dang_go/config"
-	"dang_go/internal/model/system"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-func InitGormDB() *sql.DB {
+type Database interface {
+	InitGormDB() (db *sql.DB)
+}
+
+type Mysql struct {
+}
+
+func (e *Mysql) InitGormDB() *sql.DB {
 	// 读取db配置
 	c := config.GetConfig()
 
@@ -54,15 +59,5 @@ func InitGormDB() *sql.DB {
 		panic(err)
 	}
 
-	//自动迁移表
-	tableInit(db)
-
 	return sqldb
-}
-
-func tableInit(db *gorm.DB) {
-	// 菜单表
-	// 创建表时添加后缀
-	db.AutoMigrate(&system.Menu{})
-
 }

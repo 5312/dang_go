@@ -3,8 +3,8 @@ package controller
 import (
 	// go 标准包
 
-	// 内部包
-	"dang_go/internal/model"
+	"dang_go/internal/database"
+
 	"dang_go/internal/model/system"
 	"fmt"
 
@@ -29,8 +29,8 @@ func (m *Menus) AddMenu(ctx iris.Context) {
 	// 接收参数
 	var creatMenu system.Menu
 	if err := ctx.ReadJSON(&creatMenu); err != nil {
-		// fmt.Println(creatMenu)
-		result := model.DB.Create(&creatMenu) // 通过数据的指针来创建
+
+		result := database.DB.Create(&creatMenu) // 通过数据的指针来创建
 		fmt.Printf("%v\n", result.Error)
 		if result.Error == nil {
 			ctx.JSON(Response{
@@ -42,7 +42,6 @@ func (m *Menus) AddMenu(ctx iris.Context) {
 			})
 			return
 		}
-
 	}
 	arr := []system.Menu{}
 	arr = append(arr, creatMenu)
@@ -59,7 +58,7 @@ func (m *Menus) AddMenu(ctx iris.Context) {
 func (m *Menus) DeleteMenu(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("ID", 0)
 
-	err := model.DB.Delete(&system.Menu{}, id).Error
+	err := database.DB.Delete(&system.Menu{}, id).Error
 	if err != nil {
 		ctx.JSON(iris.Map{
 			"success": false,
@@ -81,9 +80,9 @@ func (m *Menus) UpMenu(ctx iris.Context) {
 
 	var results []*system.Menu //[]map[string]interface{}
 	// 从 t 中获取 返回行数 RowsAfffected
-	t := model.DB.Table("menus").First(&results, id).Error
+	t := database.DB.Table("menus").First(&results, id).Error
 
-	err := model.DB.Save(&results).Error
+	err := database.DB.Save(&results).Error
 
 	if err != nil && t != nil {
 		ctx.JSON(iris.Map{
@@ -105,7 +104,7 @@ func (m *Menus) GetListMenu(ctx iris.Context) {
 	// Get all records
 	var results []*system.Menu //[]map[string]interface{}
 	// 从 t 中获取 返回行数 RowsAfffected
-	t := model.DB.Table("menus").Find(&results)
+	t := database.DB.Table("menus").Find(&results)
 	a := TreeNode(results, 0)
 
 	fmt.Println(a)
@@ -124,15 +123,24 @@ func (m *Menus) GetListMenu(ctx iris.Context) {
 }
 
 /* 返回处理 */
-func backJson() interface{} {
+func backJson(successOrError bool) interface{} {
 
-	res := Res{
-		Success: true,
-		Code:    0,
-		Msg:     "添加成功",
+	if successOrError {
+		res := Res{
+			Success: true,
+			Code:    0,
+			Msg:     "添加成功",
+		}
+		return res
+	} else {
+		res := Res{
+			Success: true,
+			Code:    1,
+			Msg:     "添加失败",
+		}
+		return res
 	}
 
-	return res
 }
 
 /* 转换树结构 */
@@ -141,7 +149,7 @@ func TreeNode(list []*system.Menu, pid uint) []TreeResponse {
 
 	for _, item := range list {
 		// pid == 0 是第一层
-		if item.Parent_id == pid {
+		if item.ParentId == pid {
 			var children TreeResponse
 
 			err := gconv.Struct(item, &children)
