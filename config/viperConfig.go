@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// MySQL 链接配置
+// DbConfig MySQL 链接配置
 // 字段 类型 员信息
 type DbConfig struct {
 	AutoCreateTable bool   `yaml:"AutoCreateTable"`
@@ -19,7 +19,7 @@ type DbConfig struct {
 	Charset         string `yaml:"Charset"`
 }
 
-/* 初始化配置文件 */
+/*InitConfig 初始化配置文件 */
 func (d *DbConfig) InitConfig() {
 	viper.SetConfigFile("../config.yaml") // 指定配置文件路径
 	viper.SetConfigName("config")         // 配置文件名称(无扩展名)
