@@ -3,7 +3,6 @@ package controller
 import (
 	"dang_go/internal/model/system"
 	"dang_go/tools/app"
-	"fmt"
 	"github.com/gogf/gf/util/gconv"
 	"github.com/kataras/iris/v12"
 )
@@ -65,10 +64,6 @@ func GetListMenu(ctx iris.Context) {
 	name := ctx.URLParam("name")
 	startime := ctx.URLParam("startTime")
 	endtime := ctx.URLParam("startTime")
-
-	fmt.Println(name)
-	fmt.Println(startime)
-	fmt.Println(endtime)
 
 	result, err := data.GetPage(name, startime, endtime)
 	if err != nil {

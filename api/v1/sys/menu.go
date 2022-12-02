@@ -7,7 +7,7 @@ import (
 
 // 路由
 
-func RegisterRoute(app router.Party) {
+func RegisterMenuRoute(app router.Party) {
 	// system 组
 	api := app.Party("/sys")
 	{

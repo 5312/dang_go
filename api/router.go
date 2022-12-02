@@ -11,6 +11,7 @@ func InitSysRouter(app *iris.Application) {
 	v1 := app.Party("/v1")
 	{
 		// sys
-		sys.RegisterRoute(v1)
+		sys.RegisterMenuRoute(v1)
+		sys.RegisterUserRoute(v1)
 	}
 }
