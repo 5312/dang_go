@@ -2,6 +2,7 @@ package system
 
 import (
 	"dang_go/internal/database"
+	"github.com/dgrijalva/jwt-go"
 	"gorm.io/gorm"
 )
 
@@ -26,12 +27,26 @@ func (e *User) Create() (id int, err error) {
 }
 
 /*GetPage 查*/
-func (e *User) GetPage(n string) (User []User, err error) {
+func (e *User) GetPage(name string) (User []User, err error) {
+	table := database.DB.Model(&e)
+	var n = "%" + name + "%"
+	if err = table.Where("name like ?", n).Order("sort").Find(&User).Error; err != nil {
+		return
+	}
+	return
+}
+
+type Claims struct {
+	ID       int64
+	Username string
+	jwt.StandardClaims
+}
+
+/*Login 登录*/
+func (e *User) Login(name string, password string) (User []User, err error) {
 	table := database.DB.Model(&e)
 
-	if err = table.Where("name like ?", "%@name% ", map[string]interface{}{
-		"name": n,
-	}).Order("sort").Find(&User).Error; err != nil {
+	if err = table.Debug().Where("name = ?", name).Find(&User).Error; err != nil {
 		return
 	}
 	return
