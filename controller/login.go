@@ -17,5 +17,5 @@ func Login(ctx iris.Context) {
 		return
 	}
 
-	app.OK(ctx, success, "删除成功")
+	app.OK(ctx, success, "登录成功")
 }

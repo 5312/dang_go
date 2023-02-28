@@ -2,7 +2,9 @@ package system
 
 import (
 	"dang_go/internal/database"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
 )
 
@@ -49,5 +51,15 @@ func (e *User) Login(name string, password string) (User []User, err error) {
 	if err = table.Debug().Where("name = ?", name).Find(&User).Error; err != nil {
 		return
 	}
+
+	if len(User) <= 0 {
+		// 没有用户
+		err = errors.New("用户名不存在")
+		return
+	}
+	// 对比密码
+	fmt.Println(User[0].Password)
+	//pass := User[0].Password
+	//password == pass
 	return
 }
