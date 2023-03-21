@@ -1,6 +1,8 @@
 package middleware
 
-import "github.com/kataras/iris/v12"
+import (
+	"github.com/kataras/iris/v12"
+)
 
 // Cors 实现服务端跨域
 // Cors is a middleware function that appends headers

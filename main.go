@@ -6,6 +6,7 @@ import (
 	. "dang_go/config"
 	. "dang_go/internal/database"
 	"dang_go/internal/model/gorm"
+	_ "dang_go/pay"
 	"fmt"
 )
 

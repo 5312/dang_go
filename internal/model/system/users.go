@@ -2,9 +2,12 @@ package system
 
 import (
 	"dang_go/internal/database"
-	"github.com/dgrijalva/jwt-go"
+	jwt "dang_go/middleware"
+	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
+	"log"
+	"time"
 )
 
 type User struct {
@@ -37,14 +40,14 @@ func (e *User) GetPage(name string) (User []User, err error) {
 	return
 }
 
-type Claims struct {
-	ID       int64
-	Username string
-	jwt.StandardClaims
+type LoginResult struct {
+	User  interface{} `json:"user"`
+	Token string      `json:"token"`
 }
 
 /*Login 登录*/
-func (e *User) Login(name string, password string) (User []User, err error) {
+func (e *User) Login(name string, password string) (token LoginResult, err error) {
+	var User []User
 	table := database.DB.Model(&e)
 
 	if err = table.Debug().Where("name = ?", name).Where("password = ?", password).Find(&User).Error; err != nil {
@@ -56,6 +59,38 @@ func (e *User) Login(name string, password string) (User []User, err error) {
 		err = errors.New("用户名不存在")
 		return
 	}
+	generateToken := GenerateToken(User[0])
+	return generateToken, nil
+}
 
-	return
+// 生成令牌  创建jwt风格的token
+func GenerateToken(user User) LoginResult {
+	j := &jwt.JWT{
+		[]byte("newtrekWang"),
+	}
+	claims := jwt.CustomClaims{
+		user.ID,
+		user.Name,
+		user.Password,
+		jwtgo.StandardClaims{
+			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
+			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
+			Issuer:    "admin",                         //签名的发行者
+		},
+	}
+
+	token, err := j.CreateToken(claims)
+	if err != nil {
+		return LoginResult{
+			User:  user,
+			Token: token,
+		}
+	}
+
+	log.Println(token)
+	data := LoginResult{
+		User:  user,
+		Token: token,
+	}
+	return data
 }

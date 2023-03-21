@@ -2,6 +2,7 @@ package sys
 
 import (
 	"dang_go/controller"
+	"dang_go/middleware"
 	"github.com/kataras/iris/v12/core/router"
 )
 
@@ -11,6 +12,12 @@ func RegisterMenuRoute(app router.Party) {
 	// system 组
 	api := app.Party("/sys")
 	{
+
+		// 登录
+		api.Get("/login", controller.Login)
+	}
+	{
+		api.Use(middleware.JWTAuth)
 		// 菜单
 		api.Post("/addmenus", controller.InsertMenu)
 		api.Delete("/menus/{ID:uint}", controller.DeleteMenu)
@@ -21,8 +28,7 @@ func RegisterMenuRoute(app router.Party) {
 		//api.Delete("/menus/{ID:uint}", controller.DeleteMenu)
 		//api.Put("/menus/{ID:uint}", controller.UpMenu)
 		api.Get("/user/list", controller.GetListUser)
-		// 登录
-		api.Get("/login", controller.Login)
+
 		//api.Post("/user/add", controller.InsterUser)
 		//api.Delete("/menus/{ID:uint}", controller.DeleteMenu)
 		//api.Put("/menus/{ID:uint}", controller.UpMenu)
