@@ -2,7 +2,6 @@ package system
 
 import (
 	"dang_go/internal/database"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
@@ -48,7 +47,7 @@ type Claims struct {
 func (e *User) Login(name string, password string) (User []User, err error) {
 	table := database.DB.Model(&e)
 
-	if err = table.Debug().Where("name = ?", name).Find(&User).Error; err != nil {
+	if err = table.Debug().Where("name = ?", name).Where("password = ?", password).Find(&User).Error; err != nil {
 		return
 	}
 
@@ -57,9 +56,6 @@ func (e *User) Login(name string, password string) (User []User, err error) {
 		err = errors.New("用户名不存在")
 		return
 	}
-	// 对比密码
-	fmt.Println(User[0].Password)
-	//pass := User[0].Password
-	//password == pass
+
 	return
 }
