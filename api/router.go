@@ -2,6 +2,8 @@ package api
 
 import (
 	"dang_go/api/v1/sys"
+	"dang_go/controller"
+	"dang_go/middleware"
 	"github.com/iris-contrib/swagger/v12"
 	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/kataras/iris/v12"
@@ -14,6 +16,12 @@ func InitSysRouter(app *iris.Application) {
 	// V1
 	v1 := app.Party("/v1")
 	{
+		// 登录
+		v1.Get("/login", controller.Login)
+	}
+	{
+		//权限验证
+		v1.Use(middleware.JWTAuth)
 		// sys
 		sys.RegisterMenuRoute(v1)
 	}
@@ -25,6 +33,4 @@ func InitSysRouter(app *iris.Application) {
 	//}
 	//app.Get("/swagger/*any", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 	app.Get("/swagger/index.html", swagger.WrapHandler(swaggerFiles.Handler))
-
-	//app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 }
