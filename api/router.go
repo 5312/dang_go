@@ -20,7 +20,6 @@ func InitSysRouter(app *iris.Application) {
 		// 登录  无权限
 		v1.Post("/login", controller.Login)
 		v1.Post("/alipay/login", controller.AlipayLogin)
-		v1.Post("/alipay/login1", controller.AlipayLogin1)
 	}
 	{
 		//权限验证
@@ -28,7 +27,7 @@ func InitSysRouter(app *iris.Application) {
 		// sys
 		sys.RegisterMenuRoute(v1)
 		sys.RegisterShopRoute(v1)
-
+		sys.RegisterMemberRoute(v1)
 	}
 	//公共接口
 	{

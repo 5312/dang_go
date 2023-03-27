@@ -10,6 +10,7 @@ func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		new(system.Menu),
 		new(system.User),
+		new(system.Member),
 		new(shop.Merchant),
 	)
 }
