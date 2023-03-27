@@ -31,3 +31,5 @@ project.exe
 
 #
 *.exe
+docs/
+uploads/
