@@ -27,8 +27,9 @@ type Merchant struct {
 	ShopAdminPhone          string `json:"shop_admin_phone" validate:"required" gorm:"not null;comment:开户的管理员电话"`
 	AlipayNumber            string `json:"alipay_number" validate:"required" gorm:"not null;comment:支付宝账户"`
 	AlipayName              string `json:"alipay_name" validate:"required" gorm:"not null;comment:支付宝账户名称"`
-	RentBalance             string `json:"rent_balance"  gorm:";comment:租金余额"`
-	WithdrawalRatio         string `json:"withdrawal_ratio"  gorm:";comment:提现比例"`
+	RentBalance             string `json:"rent_balance"  gorm:"comment:租金余额"`
+	WithdrawalRatio         string `json:"withdrawal_ratio"  gorm:"comment:提现比例"`
+	PurchasePrice           int    `json:"purchase_price"  gorm:"comment:商家采购价"`
 }
 
 // 使用 Validate单例, 缓存结构体信息

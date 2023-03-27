@@ -26,8 +26,11 @@ func UploadImage(ctx iris.Context) {
 	}()
 	// 获取文件名称
 	fname := info.Filename
-	//把文件上传到哪里
-	//out, err := os.OpenFile("uploads/"+fname, os.O_WRONLY|os.O_CREATE, 0666)
+	// 检查uploads目录是否存在，如果不存在则创建该目录
+	errs := os.MkdirAll("uploads", os.ModePerm)
+	if errs != nil {
+		log.Fatal(err)
+	}
 	// 创建一个新的文件
 	ext := filepath.Ext(fname)
 	filename := fname[0 : len(fname)-len(ext)]
@@ -35,8 +38,9 @@ func UploadImage(ctx iris.Context) {
 	newFilename := fmt.Sprintf("%s_%s%s", filename, timestamp, ext)
 
 	newFilePath := filepath.Join("uploads", newFilename)
-
-	out, err := os.Create("uploads/" + newFilename)
+	//把文件上传到哪里
+	out, err := os.OpenFile("uploads/"+newFilename, os.O_WRONLY|os.O_CREATE, 0666)
+	//out, err := os.Create("uploads/" + newFilename)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return
