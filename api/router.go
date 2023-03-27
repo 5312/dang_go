@@ -16,14 +16,17 @@ func InitSysRouter(app *iris.Application) {
 	// V1
 	v1 := app.Party("/v1")
 	{
-		// 登录
-		v1.Get("/login", controller.Login)
+		// 登录  无权限
+		v1.Post("/login", controller.Login)
+		v1.Post("/alipay/login", controller.AlipayLogin)
+		v1.Post("/alipay/login1", controller.AlipayLogin1)
 	}
 	{
 		//权限验证
 		v1.Use(middleware.JWTAuth)
 		// sys
 		sys.RegisterMenuRoute(v1)
+		sys.RegisterShopRoute(v1)
 	}
 	/* swagger文档*/
 	// 指向swagger init生成文档的路径

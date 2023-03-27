@@ -18,6 +18,13 @@ type User struct {
 	Password string  `json:"password" gorm:"not null;comment:密码"`
 	Sort     int     `json:"sort" gorm:"comment:显示顺序;"`
 }
+type UserInfo struct {
+	Name    string  `json:"name" gorm:"not null;comment:姓名"`
+	Age     uint8   `json:"age" gorm:"comment:年龄"`
+	Email   *string `json:"email" gorm:"comment:邮箱"`
+	Account int     `json:"account" gorm:"not null;comment:账号"`
+	Sort    int     `json:"sort" gorm:"comment:显示顺序;"`
+}
 
 /*Create 增 */
 func (e *User) Create() (id int, err error) {
@@ -40,7 +47,7 @@ func (e *User) GetPage(name string) (User []User, err error) {
 }
 
 type LoginResult struct {
-	User  interface{} `json:"user"`
+	User  interface{} `json:"shop"`
 	Token string      `json:"token"`
 }
 
@@ -79,16 +86,22 @@ func GenerateToken(user User) LoginResult {
 	}
 
 	token, err := j.CreateToken(claims)
+	userInfo := map[string]interface{}{
+		"id":      user.ID,
+		"name":    user.Name,
+		"age":     user.Age,
+		"email":   user.Email,
+		"account": user.Account,
+	}
 	if err != nil {
 		return LoginResult{
-			User:  user,
+			User:  userInfo,
 			Token: token,
 		}
 	}
-
 	//log.Println(token)
 	data := LoginResult{
-		User:  user,
+		User:  userInfo,
 		Token: token,
 	}
 	return data

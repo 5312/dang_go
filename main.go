@@ -39,6 +39,8 @@ func main() {
 	db.InitGormDB()
 	// 3. 迁移表
 	_ = gorm.AutoMigrate(DB)
+	fmt.Printf("数据库结构初始化成功！")
+
 	// 4.注册路由
 	InitUser()
 
