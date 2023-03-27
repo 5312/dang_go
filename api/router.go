@@ -1,6 +1,7 @@
 package api
 
 import (
+	"dang_go/api/v1/public"
 	"dang_go/api/v1/sys"
 	"dang_go/controller"
 	"dang_go/middleware"
@@ -27,6 +28,11 @@ func InitSysRouter(app *iris.Application) {
 		// sys
 		sys.RegisterMenuRoute(v1)
 		sys.RegisterShopRoute(v1)
+
+	}
+	//公共接口
+	{
+		public.RegisterShopRoute(v1)
 	}
 	/* swagger文档*/
 	// 指向swagger init生成文档的路径
