@@ -3,6 +3,7 @@ package system
 
 import (
 	"dang_go/internal/database"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -18,10 +19,18 @@ type Member struct {
 	PromoterManId string `json:"promoter_man_id" gorm:"not null;comment:推广员id"`
 	IdNumber      string `json:"id_number" gorm:"not null;comment:身份证号"`
 	InflowStatus  string `json:"inflow_status" gorm:"not null;comment:入流状态:1搜索 2平台扫码;"`
+	ZfbUserId     string `json:"zfb_user_id" gorm:"comment:支付宝user_id"`
 }
 
 /*Create 增 */
-func (e *Member) Create() (err error) {
+func (e *Member) Create(ID string) (err error) {
+	// 先查询
+	var Id []Member
+	database.DB.Model(&e).Where("zfb_user_id = ?", ID).Find(&Id)
+	if len(Id) != 0 {
+		fmt.Printf("会员已添加不重复添加")
+		return
+	}
 	result := database.DB.Create(&e)
 	if result.Error != nil {
 		err = result.Error
