@@ -7,5 +7,7 @@
 运行
 
 ```sh
-iris-cli run
+rizla main.go
 ```
+
+

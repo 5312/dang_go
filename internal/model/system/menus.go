@@ -70,10 +70,14 @@ func (e *Menu) Update(id uint) (update Menu, err error) {
 }
 
 /*GetPage 查*/
-func (e *Menu) GetPage() (Menus []Menu, err error) {
+func (e *Menu) GetPage(n string, s string, end string) (Menus []Menu, err error) {
 	table := database.DB.Model(&e)
 
-	if err = table.Order("sort").Find(&Menus).Error; err != nil {
+	if err = table.Where(`name like @name OR created_at > @startTime AND created_at < @endTime`, map[string]interface{}{
+		"name":      "%" + n + "%",
+		"startTime": s,
+		"endTime":   end,
+	}).Order("sort").Find(&Menus).Error; err != nil {
 		return
 	}
 	return

@@ -3,15 +3,15 @@ package api
 import (
 	"dang_go/middleware"
 	"fmt"
-	"github.com/spf13/viper"
-
 	"github.com/kataras/iris/v12"
+	"github.com/spf13/viper"
 )
 
 // InitUser 初始化api接口
 func InitUser() {
 	/* 1. 初始化iris */
 	app := iris.New()
+
 	/* 2. 中间件 */
 	middleware.InitMiddleware(app)
 

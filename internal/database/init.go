@@ -1,13 +1,12 @@
 package database
 
 import (
+	"dang_go/config"
 	"database/sql"
 	"fmt"
-	"time"
-
-	"dang_go/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"time"
 )
 
 var DB *gorm.DB

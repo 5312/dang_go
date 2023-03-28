@@ -55,11 +55,17 @@ func UpMenu(ctx iris.Context) {
 }
 
 /*GetListMenu 查 */
+// name:
+//startTime:
+//endTime:
 func GetListMenu(ctx iris.Context) {
 	// Get all records
 	var data system.Menu
+	name := ctx.URLParam("name")
+	startime := ctx.URLParam("startTime")
+	endtime := ctx.URLParam("startTime")
 
-	result, err := data.GetPage()
+	result, err := data.GetPage(name, startime, endtime)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return
