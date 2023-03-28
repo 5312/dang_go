@@ -3,7 +3,6 @@ package controller
 import (
 	"dang_go/internal/model/system"
 	"dang_go/tools/app"
-	"fmt"
 	"github.com/kataras/iris/v12"
 )
 
@@ -20,7 +19,6 @@ func Login(ctx iris.Context) {
 		app.Error(ctx, -1, err, "请输入参数")
 		return
 	}
-	fmt.Printf("%v \n", data)
 
 	name := data.Name
 	password := data.Password

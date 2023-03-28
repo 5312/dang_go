@@ -1,6 +1,7 @@
 package gorm
 
 import (
+	"dang_go/internal/model/promoter"
 	"dang_go/internal/model/shop"
 	"dang_go/internal/model/system"
 	"gorm.io/gorm"
@@ -12,5 +13,6 @@ func AutoMigrate(db *gorm.DB) error {
 		new(system.User),
 		new(system.Member),
 		new(shop.Merchant),
+		new(promoter.Promoter),
 	)
 }

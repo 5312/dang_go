@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// 平台登录账号
 type User struct {
 	gorm.Model
 	Name     string  `json:"name" gorm:"not null;comment:姓名"`
@@ -82,7 +83,7 @@ func GenerateToken(user User) LoginResult {
 		StandardClaims: jwtgo.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
-			Issuer:    "admin",                         //签名的发行者
+			Issuer:    "",                              //签名的发行者
 		},
 	}
 

@@ -33,6 +33,11 @@ func NewJWT() *JWT {
 // JWTAuth 中间件，检查token
 func JWTAuth(ctx iris.Context) {
 
+	if LoginNoAuth(ctx) {
+		ctx.Next()
+		return
+	}
+
 	token := ctx.Request().Header.Get("Authorization")
 
 	if token == "" {
@@ -70,22 +75,16 @@ func JWTAuth(ctx iris.Context) {
 
 // 载荷，可以加一些自己需要的信息
 type CustomClaims struct {
-	ID       uint   `json:"userId"`
-	Name     string `json:"name"`
-	Password string `json:"telephone"`
-	jwt.StandardClaims
+	ID                 uint   `json:"userId"`
+	Name               string `json:"name"`
+	Password           string `json:"telephone"`
+	jwt.StandardClaims        // { 过期时间 签发者 生效时间}
 }
 
 // 获取signKey
 func GetSignKey() string {
 	return SignKey
 }
-
-//// 这是SignKey
-//func SetSignKey(key string) string {
-//	SignKey = key
-//	return SignKey
-//}
 
 // CreateToken 生成一个token
 func (j *JWT) CreateToken(claims CustomClaims) (string, error) {

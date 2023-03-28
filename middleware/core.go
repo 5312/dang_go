@@ -18,7 +18,7 @@ func Cors(c iris.Context) {
 		c.Header("Allow", "HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS")
 		c.Header("Content-Type", "application/json")
 		//c.AbortWithStatus(200)
-		c.StatusCode(204)
+		c.StatusCode(200)
 		//	ctx.StopExecution() 中止响应
 		c.Next()
 	}

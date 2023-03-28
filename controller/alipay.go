@@ -86,7 +86,7 @@ func AlipayLogin(ctx iris.Context) {
 			IdNumber:      "",
 			InflowStatus:  "",
 		}
-
+	// TODO: 判断库里是否存在
 	createErr := mem.Create()
 	if createErr != nil {
 		app.Error(ctx, -1, createErr, "")
