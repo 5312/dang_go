@@ -4,7 +4,6 @@ import (
 	"dang_go/api/v1/public"
 	"dang_go/api/v1/sys"
 	"dang_go/controller"
-	"dang_go/middleware"
 	"github.com/iris-contrib/swagger/v12"
 	"github.com/iris-contrib/swagger/v12/swaggerFiles"
 	"github.com/kataras/iris/v12"
@@ -17,21 +16,20 @@ func InitSysRouter(app *iris.Application) {
 	// V1
 	v1 := app.Party("/v1")
 	{
-		// 登录  无权限
+		// 登录  jwt
 		v1.Post("/login", controller.Login)
 		v1.Post("/alipay/login", controller.AlipayLogin)
 	}
 	{
 		//权限验证
-		v1.Use(middleware.JWTAuth)
+		//v1.Use(middleware.JWTAuth)
 		// sys
-		sys.RegisterMenuRoute(v1)
-		sys.RegisterShopRoute(v1)
-		sys.RegisterMemberRoute(v1)
-	}
-	//公共接口
-	{
-		public.RegisterShopRoute(v1)
+		sys.RegisterMenuRoute(v1)     // 菜单
+		sys.RegisterShopRoute(v1)     // 商户
+		sys.RegisterMemberRoute(v1)   // 会员
+		sys.RegisterPromoterRoute(v1) // 推广商
+		//公共接口
+		public.RegisterPublicRoute(v1)
 	}
 	/* swagger文档*/
 	// 指向swagger init生成文档的路径
