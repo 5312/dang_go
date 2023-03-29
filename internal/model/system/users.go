@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-// 平台登录账号
 type User struct {
 	gorm.Model
 	Name     string  `json:"name" gorm:"not null;comment:姓名"`
@@ -49,7 +48,7 @@ func (e *User) GetPage(name string) (User []User, err error) {
 }
 
 type LoginResult struct {
-	User  interface{} `json:"shop"`
+	User  interface{} `json:"user"`
 	Token string      `json:"token"`
 }
 
@@ -67,12 +66,12 @@ func (e *User) Login(name string, password string) (token LoginResult, err error
 		err = errors.New("用户名不存在")
 		return
 	}
-	generateToken := GenerateToken(User[0])
+	generateToken, err := generateToken(User[0])
 	return generateToken, nil
 }
 
-// GenerateToken 生成令牌  创建jwt风格的token
-func GenerateToken(user User) LoginResult {
+// generateToken 生成令牌  创建jwt风格的token
+func generateToken(user User) (LoginResult, error) {
 	j := &jwt.JWT{
 		[]byte("newtrekWang"),
 	}
@@ -83,10 +82,9 @@ func GenerateToken(user User) LoginResult {
 		StandardClaims: jwtgo.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
-			Issuer:    "",                              //签名的发行者
+			Issuer:    "admin",                         //签名的发行者
 		},
 	}
-
 	token, err := j.CreateToken(claims)
 	userInfo := map[string]interface{}{
 		"id":      user.ID,
@@ -95,16 +93,9 @@ func GenerateToken(user User) LoginResult {
 		"email":   user.Email,
 		"account": user.Account,
 	}
-	if err != nil {
-		return LoginResult{
-			User:  userInfo,
-			Token: token,
-		}
-	}
-	//log.Println(token)
 	data := LoginResult{
 		User:  userInfo,
 		Token: token,
 	}
-	return data
+	return data, err
 }

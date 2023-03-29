@@ -12,14 +12,18 @@ import (
 type Member struct {
 	gorm.Model
 	Name          string `json:"name" gorm:"not null;comment:会员名称"`
-	Reality       string `json:"reality" gorm:"not null;comment:真实姓名"`
-	Phone         string `json:"phone" gorm:"not null;comment:手机号"`
-	BonusPoints   string `json:"bonus_points" gorm:"not null;comment:奖励分"`
-	PromoterId    string `json:"promoter_id" gorm:"not null;comment:推广商id"`
-	PromoterManId string `json:"promoter_man_id" gorm:"not null;comment:推广员id"`
-	IdNumber      string `json:"id_number" gorm:"not null;comment:身份证号"`
-	InflowStatus  string `json:"inflow_status" gorm:"not null;comment:入流状态:1搜索 2平台扫码;"`
-	ZfbUserId     string `json:"zfb_user_id" gorm:"comment:支付宝user_id"`
+	Reality       string `json:"reality" gorm:"comment:真实姓名"`
+	Phone         string `json:"phone" gorm:"comment:手机号"`
+	BonusPoints   string `json:"bonus_points" gorm:"comment:奖励分"`
+	PromoterId    string `json:"promoter_id" gorm:"comment:推广商id"`
+	PromoterManId string `json:"promoter_man_id" gorm:"comment:推广员id"`
+	IdNumber      string `json:"id_number" gorm:"comment:身份证号"`
+	IdNumberUrl   string `json:"id_number_url" gorm:"comment:身份证号照片"`
+	IsStudent     string `json:"is_student" gorm:"comment:是否学生"`
+	OrderCount    string `json:"order_count" gorm:"comment:订单信息"`
+	InflowStatus  string `json:"inflow_status" gorm:"comment:入流状态:1搜索 2平台扫码;"`
+	ZfbUserId     string `json:"zfb_user_id" gorm:"not null;comment:支付宝user_id"`
+	Avatar        string `json:"avatar" gorm:"comment:头像"`
 }
 
 /*Create 增 */
