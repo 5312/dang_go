@@ -7,9 +7,9 @@ import (
 )
 
 // RegisterMemberRoute 会员
-func RegisterMemberRoute(app router.Party) {
+func RegisterMemberRoute(v1 router.Party) {
 	// system 组
-	api := app.Party("/member")
+	api := v1.Party("/member")
 	{
 		// 会员
 		api.Get("/list", controller.GetPage)

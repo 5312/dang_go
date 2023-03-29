@@ -3,7 +3,6 @@ package system
 
 import (
 	"dang_go/internal/database"
-	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -32,7 +31,7 @@ func (e *Member) Create(ID string) (err error) {
 	var Id []Member
 	database.DB.Model(&e).Where("zfb_user_id = ?", ID).Find(&Id)
 	if len(Id) != 0 {
-		fmt.Printf("会员已添加不重复添加")
+		//fmt.Printf("会员已添加不重复添加")
 		return
 	}
 	result := database.DB.Create(&e)

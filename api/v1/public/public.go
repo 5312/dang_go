@@ -6,9 +6,9 @@ import (
 )
 
 // 公共路由 v1
-func RegisterPublicRoute(app router.Party) {
+func RegisterPublicRoute(v1 router.Party) {
 	// system 组
-	api := app.Party("/public")
+	api := v1.Party("/public")
 	//商户
 	{
 		// 上传图片

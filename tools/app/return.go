@@ -22,6 +22,10 @@ func OK(c iris.Context, data interface{}, msg string) {
 func Error(c iris.Context, code int, err error, msg string) {
 	var res Response
 	res.Msg = err.Error()
+	if err.Error() == "EOF" {
+		res.Msg = "请输入参数"
+	}
+
 	if msg != "" {
 		res.Msg = msg
 	}

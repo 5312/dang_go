@@ -10,4 +10,5 @@
 rizla main.go
 ```
 
+### config.yaml 配置文件 必须
 

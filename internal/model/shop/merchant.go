@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 商家
 type Merchant struct {
 	gorm.Model
 	CompanyName             string `json:"company_name" validate:"required" gorm:"not null;comment:企业名称"`

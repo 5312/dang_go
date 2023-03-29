@@ -1,6 +1,7 @@
 package api
 
 import (
+	"dang_go/api/v1/apialipay"
 	"dang_go/api/v1/public"
 	"dang_go/api/v1/sys"
 	"dang_go/controller"
@@ -28,6 +29,9 @@ func InitSysRouter(app *iris.Application) {
 		sys.RegisterShopRoute(v1)     // 商户
 		sys.RegisterMemberRoute(v1)   // 会员
 		sys.RegisterPromoterRoute(v1) // 推广商
+
+		// 小程序
+		apialipay.RegisterShopCategoryRoute(v1) // 分类
 		//公共接口
 		public.RegisterPublicRoute(v1)
 	}

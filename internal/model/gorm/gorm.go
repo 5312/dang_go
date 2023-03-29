@@ -11,8 +11,11 @@ func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		new(system.Menu),
 		new(system.User),
-		new(system.Member),
-		new(shop.Merchant),
+		new(system.Member), // 会员
+		new(shop.Merchant), // 商家
+		new(shop.Shop),     // 上坪
+		new(shop.Category), // 分类
+
 		new(promoter.Promoter),
 	)
 }

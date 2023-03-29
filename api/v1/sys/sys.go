@@ -7,9 +7,9 @@ import (
 
 // 路由
 
-func RegisterMenuRoute(app router.Party) {
+func RegisterMenuRoute(v1 router.Party) {
 	// system 组
-	api := app.Party("/sys")
+	api := v1.Party("/sys")
 
 	{
 		// 菜单

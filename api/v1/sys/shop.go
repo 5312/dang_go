@@ -7,9 +7,9 @@ import (
 
 // 路由
 
-func RegisterShopRoute(app router.Party) {
+func RegisterShopRoute(v1 router.Party) {
 	// system 组
-	api := app.Party("/shop")
+	api := v1.Party("/shop")
 	//商户
 	{
 		// 商户

@@ -6,9 +6,9 @@ import (
 )
 
 // RegisterPromoterRoute 路由 /v1
-func RegisterPromoterRoute(app router.Party) {
+func RegisterPromoterRoute(v1 router.Party) {
 	// system 组
-	api := app.Party("/promoter")
+	api := v1.Party("/promoter")
 	//推广商
 	{
 		// 推广商
