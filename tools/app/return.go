@@ -4,6 +4,12 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
+// 声明map 错误类型
+var ErrorText = map[string]string{
+	"record not found": "找不到记录",
+	"EOF":              "请输入参数",
+}
+
 /*OK 成功数据处理*/
 func OK(c iris.Context, data interface{}, msg string) {
 
@@ -21,9 +27,9 @@ func OK(c iris.Context, data interface{}, msg string) {
 /*Error 失败数据处理*/
 func Error(c iris.Context, code int, err error, msg string) {
 	var res Response
-	res.Msg = err.Error()
-	if err.Error() == "EOF" {
-		res.Msg = "请输入参数"
+	//res.Msg = err.Error()
+	if res.Msg = ErrorText[err.Error()]; res.Msg == "" {
+		res.Msg = err.Error()
 	}
 
 	if msg != "" {
