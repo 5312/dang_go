@@ -4,7 +4,10 @@ package system
 import (
 	"dang_go/internal/database"
 	jwt "dang_go/middleware"
+	"dang_go/tools"
+	"fmt"
 	jwtgo "github.com/dgrijalva/jwt-go"
+	"github.com/gogf/gf/util/gconv"
 	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
 	"time"
@@ -47,13 +50,15 @@ func (e *User) GetPage(name string) (User []User, err error) {
 	return
 }
 
-type LoginResult struct {
-	User  interface{} `json:"user"`
-	Token string      `json:"token"`
-}
-
-/*Login 登录*/
-func (e *User) Login(name string, password string) (token LoginResult, err error) {
+/*Login
+* @Description: 用户名登录 TODO: 账号登录
+* @receiver e
+* @param name
+* @param password
+* @return token
+* @return err
+ */
+func (e *User) Login(name string, password string) (token tools.LoginResult, err error) {
 	var Users []User
 	table := database.DB.Model(&e)
 
@@ -66,36 +71,23 @@ func (e *User) Login(name string, password string) (token LoginResult, err error
 		err = errors.New("用户名不存在")
 		return
 	}
-	generateTokens, err := generateToken(Users[0])
-	return generateTokens, nil
-}
-
-// generateToken 生成令牌  创建jwt风格的token
-func generateToken(user User) (LoginResult, error) {
-	j := &jwt.JWT{
-		SigningKey: []byte("newtrekWang"),
-	}
+	// 构造 CustomClaims 对象
 	claims := jwt.CustomClaims{
-		ID:       user.ID,
-		Name:     user.Name,
-		Password: user.Password,
+		ID:       Users[0].ID,
+		Name:     Users[0].Name,
+		Password: Users[0].Password,
 		StandardClaims: jwtgo.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,  // 签名生效时间
 			ExpiresAt: time.Now().Unix() + 86400, // 过期时间6 *  6 * 24 24小时
 			Issuer:    "admin",                   //签名的发行者
 		},
 	}
-	token, err := j.CreateToken(claims)
-	userInfo := map[string]interface{}{
-		"id":      user.ID,
-		"name":    user.Name,
-		"age":     user.Age,
-		"email":   user.Email,
-		"account": user.Account,
+	var userInfo UserInfo
+	errgconv := gconv.Struct(Users[0], &userInfo)
+	if err != nil {
+		fmt.Printf("转换失败%v", errgconv)
 	}
-	data := LoginResult{
-		User:  userInfo,
-		Token: token,
-	}
-	return data, err
+
+	generateTokens, err := tools.GenerateToken(claims, userInfo)
+	return generateTokens, nil
 }
