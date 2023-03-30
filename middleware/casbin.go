@@ -8,7 +8,10 @@ import (
 	"github.com/kataras/iris/v12/x/errors"
 )
 
-// EnforcerTool
+/*Casbin
+* @Description:
+* @param c
+ */
 func Casbin(c iris.Context) {
 
 	if LoginNoAuth(c) {
@@ -37,8 +40,8 @@ func Casbin(c iris.Context) {
 		fmt.Println("很遗憾,权限验证没有通过")
 
 		c.StatusCode(401)
-		error := errors.New("很遗憾,权限验证没有通过")
-		app.Error(c, -1, error, "")
+		er := errors.New("很遗憾,权限验证没有通过")
+		app.Error(c, -1, er, "")
 		c.StopExecution() //中止响应
 		//c.Next()
 	}

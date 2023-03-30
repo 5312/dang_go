@@ -67,11 +67,11 @@ func AlipayLogin(ctx iris.Context) {
 	// grantType：值为 authorization_code 时，代表用code换取；值为 refresh_token 时，代表用refresh_token换取，传空默认code换取
 	//  codeOrToken：支付宝授权码或refresh_token
 	var (
-		appId       string = viper.GetString("Alipay.AppId")   // "2021003186611052" // 租宝贝
-		privateKey         = viper.GetString("Alipay.RSA2048") //string(data)
-		grantType          = "authorization_code"
-		codeOrToken        = code.AuthCode
-		signType           = "RSA2"
+		appId       = viper.GetString("Alipay.AppId")   // "2021003186611052" // 租宝贝
+		privateKey  = viper.GetString("Alipay.RSA2048") //string(data)
+		grantType   = "authorization_code"
+		codeOrToken = code.AuthCode
+		signType    = "RSA2"
 	)
 
 	success, err := alipay.SystemOauthToken(ctx, appId, privateKey, grantType, codeOrToken, signType)
@@ -120,16 +120,16 @@ func AlipayLogin(ctx iris.Context) {
 // generateToken 生成令牌  创建jwt风格的token
 func generateToken(user system.Member) (token string, err error) {
 	j := &jwt.JWT{
-		[]byte("newtrekWang"),
+		SigningKey: []byte("newtrekWang"),
 	}
 	claims := jwt.CustomClaims{
 		ID:       user.ID,
 		Name:     user.Name,
 		Password: user.ZfbUserId,
 		StandardClaims: jwtgo.StandardClaims{
-			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
-			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
-			Issuer:    "admin",                         //签名的发行者
+			NotBefore: time.Now().Unix() - 1000, // 签名生效时间
+			ExpiresAt: time.Now().Unix() + 3600, // 过期时间 一小时
+			Issuer:    "admin",                  //签名的发行者
 		},
 	}
 	token, err = j.CreateToken(claims)

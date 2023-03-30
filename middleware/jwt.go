@@ -10,27 +10,36 @@ import (
 )
 
 // 一些常量
+//
+//goland:noinspection GoErrorStringFormat,GoErrorStringFormat,GoErrorStringFormat,GoErrorStringFormat
 var (
-	TokenExpired     error  = errors.New("Token is expired")
-	TokenNotValidYet error  = errors.New("Token not active yet")
-	TokenMalformed   error  = errors.New("That's not even a token")
-	TokenInvalid     error  = errors.New("Couldn't handle this token:")
-	SignKey          string = "newtrekWang"
+	TokenExpired     = errors.New("Token is expired")
+	TokenNotValidYet = errors.New("Token not active yet")
+	TokenMalformed   = errors.New("That's not even a token")
+	TokenInvalid     = errors.New("Couldn't handle this token")
+	SignKey          = "newtrekWang"
 )
 
-// JWT 签名结构
+// JWT
+// @Description: JWT 签名结构
 type JWT struct {
 	SigningKey []byte
 }
 
-// 新建一个jwt实例
+/*NewJWT
+* @Description: 新建一个jwt实例
+* @return *JWT
+ */
 func NewJWT() *JWT {
 	return &JWT{
 		[]byte(GetSignKey()),
 	}
 }
 
-// JWTAuth 中间件，检查token
+/*JWTAuth
+* @Description: JWTAuth 中间件，检查token
+* @param ctx
+ */
 func JWTAuth(ctx iris.Context) {
 
 	if LoginNoAuth(ctx) {
@@ -41,7 +50,7 @@ func JWTAuth(ctx iris.Context) {
 	token := ctx.Request().Header.Get("Authorization")
 
 	if token == "" {
-		app.Error(ctx, -1, errors.New("Token is expired"), "请求未携带token，无权限访问")
+		app.Error(ctx, -1, errors.New("token is expired"), "请求未携带token，无权限访问")
 		ctx.StopExecution()
 		return
 	}
@@ -53,6 +62,7 @@ func JWTAuth(ctx iris.Context) {
 	// Authorization的字符串通常是 "Bearer" 开头(可以理解为固定格式,标识使用承载模式),然后一个空格 再加上token的内容
 	// Tips:  请求头中Authorization的内容直接是token也是可以的
 	if len(authorArr) != 2 || authorArr[0] != "Bearer" {
+		//goland:noinspection GoErrorStringFormat
 		app.Error(ctx, -1, errors.New("Bearer"), "request header Authorization formal error")
 		return
 	}
@@ -73,7 +83,8 @@ func JWTAuth(ctx iris.Context) {
 	ctx.Next()
 }
 
-// 载荷，可以加一些自己需要的信息
+// CustomClaims
+// @Description: 载荷，可以加一些自己需要的信息
 type CustomClaims struct {
 	ID                 uint   `json:"userId"`
 	Name               string `json:"name"`
@@ -81,18 +92,33 @@ type CustomClaims struct {
 	jwt.StandardClaims        // { 过期时间 签发者 生效时间}
 }
 
-// 获取signKey
+/*GetSignKey
+* @Description: 获取signKey
+* @return string
+ */
 func GetSignKey() string {
 	return SignKey
 }
 
-// CreateToken 生成一个token
+/*CreateToken
+* @Description:  CreateToken 生成一个token
+* @receiver j
+* @param claims
+* @return string
+* @return error
+ */
 func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
-// 解析Tokne
+/*ParseToken
+* @Description:  解析Tokne
+* @receiver j
+* @param tokenString
+* @return *CustomClaims
+* @return error
+ */
 func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 
@@ -121,7 +147,13 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	return nil, TokenInvalid
 }
 
-// 更新token
+/*RefreshToken
+* @Description: 更新token
+* @receiver j
+* @param tokenString
+* @return string
+* @return error
+ */
 func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	jwt.TimeFunc = func() time.Time {
 		return time.Unix(0, 0)

@@ -28,12 +28,13 @@ func InsterUser(ctx iris.Context) {
 	app.OK(ctx, result, "添加成功")
 }
 
-// @Summary 获取用户信息
-// @Description 获取用户信息
-// @Tags 用户
-// @Accept  json
-// @Produce  json
-// @Param id path int true "用户ID"
+/*GetListUser
+* @Description 获取用户信息
+* @Tags 用户
+* @Accept  json
+* @Produce  json
+* @Param id path int true "用户ID"
+ */
 func GetListUser(ctx iris.Context) {
 	// Get all records
 	var data system.User

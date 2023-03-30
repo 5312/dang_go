@@ -5,7 +5,10 @@ import (
 	"github.com/kataras/iris/v12/core/router"
 )
 
-// 公共路由 v1
+/*RegisterPublicRoute
+* @Description:  公共路由 v1
+* @param v1
+ */
 func RegisterPublicRoute(v1 router.Party) {
 	// system 组
 	api := v1.Party("/public")

@@ -31,7 +31,7 @@ func (c *CasbinModel) Update(db *gorm.DB, values interface{}) error {
 	return nil
 }
 
-func (c *CasbinModel) List(db *gorm.DB) [][]string {
+func (c *CasbinModel) List() [][]string {
 	e := EnforcerTool()
 	policy := e.GetFilteredPolicy(0, c.RoleId)
 	return policy

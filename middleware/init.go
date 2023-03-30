@@ -13,7 +13,11 @@ func InitMiddleware(r *iris.Application) {
 	r.Use(Casbin)
 }
 
-// 跳过验证
+/*LoginNoAuth
+* @Description: 跳过验证
+* @param ctx
+* @return t
+ */
 func LoginNoAuth(ctx iris.Context) (t bool) {
 	path := ctx.Path()
 	stringLogin := strings.SplitN(path, "/", -1)

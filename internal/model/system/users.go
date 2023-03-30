@@ -73,16 +73,16 @@ func (e *User) Login(name string, password string) (token LoginResult, err error
 // generateToken 生成令牌  创建jwt风格的token
 func generateToken(user User) (LoginResult, error) {
 	j := &jwt.JWT{
-		[]byte("newtrekWang"),
+		SigningKey: []byte("newtrekWang"),
 	}
 	claims := jwt.CustomClaims{
 		ID:       user.ID,
 		Name:     user.Name,
 		Password: user.Password,
 		StandardClaims: jwtgo.StandardClaims{
-			NotBefore: int64(time.Now().Unix() - 1000),  // 签名生效时间
-			ExpiresAt: int64(time.Now().Unix() + 86400), // 过期时间6 *  6 * 24 24小时
-			Issuer:    "admin",                          //签名的发行者
+			NotBefore: time.Now().Unix() - 1000,  // 签名生效时间
+			ExpiresAt: time.Now().Unix() + 86400, // 过期时间6 *  6 * 24 24小时
+			Issuer:    "admin",                   //签名的发行者
 		},
 	}
 	token, err := j.CreateToken(claims)

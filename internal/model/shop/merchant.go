@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// 商家
+// Merchant 商家
 type Merchant struct {
 	gorm.Model
 	CompanyName             string  `json:"company_name" validate:"required" gorm:"not null;comment:企业名称"`
@@ -38,7 +38,7 @@ type Merchant struct {
 	AddressReturn           *Medium `json:"address_return" gorm:"type:json;归还地址:数组类型的json字符串"`
 }
 
-// []存放地址
+// Medium []存放地址
 type Medium struct {
 	Promise   string `json:"promise"`
 	AvatarUrl string `json:"avatarUrl"`
@@ -60,6 +60,7 @@ type LoginResult struct {
 	Token string      `json:"token"`
 }
 
+//goland:noinspection GoUnusedParameter
 func (e *Merchant) Login(name string, password string) (token LoginResult, err error) {
 	return
 }
@@ -149,7 +150,7 @@ func (e *Medium) UpdateAddress(id uint, data Medium, updateType string) (success
 	var update Merchant
 	result := database.DB.Model(&Merchant{}).Find(&update, id)
 	if err = result.Error; err != nil {
-		fmt.Printf("err--", err)
+		//fmt.Printf("err--", err)
 		success = false
 		return
 	}

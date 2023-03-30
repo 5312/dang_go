@@ -1,4 +1,5 @@
-// 商品分类信息
+// Package apialipay
+// @Description:
 package apialipay
 
 import (

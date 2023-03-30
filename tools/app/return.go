@@ -4,7 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-// 声明map 错误类型
+// ErrorText 声明map 错误类型
 var ErrorText = map[string]string{
 	"record not found": "找不到记录",
 	"EOF":              "请输入参数",

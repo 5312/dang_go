@@ -7,7 +7,10 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-// 添加分类
+/*AddCategory
+* @Description: 添加分类
+* @param ctx
+ */
 func AddCategory(ctx iris.Context) {
 	var data shop.Category
 	if err := ctx.ReadJSON(&data); err != nil {
@@ -24,7 +27,10 @@ func AddCategory(ctx iris.Context) {
 	app.OK(ctx, result, "添加成功")
 }
 
-// 修改信息
+/*Update
+* @Description: 修改信息
+* @param ctx
+ */
 func Update(ctx iris.Context) {
 	// 接收参数
 	var update shop.Category
@@ -55,7 +61,10 @@ func Delete(ctx iris.Context) {
 	app.OK(ctx, id, "删除成功")
 }
 
-// 获取树状数据
+/*GetTreeList
+* @Description: 获取树状数据
+* @param ctx
+ */
 func GetTreeList(ctx iris.Context) {
 	// Get all records
 	var data shop.Category

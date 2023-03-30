@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-// 添加
+// AddPromoter 添加
 func AddPromoter(ctx iris.Context) {
 	var data promoter.Promoter
 	if err := ctx.ReadJSON(&data); err != nil {
@@ -21,7 +21,10 @@ func AddPromoter(ctx iris.Context) {
 	app.OK(ctx, result, "添加成功")
 }
 
-// 查询
+/*GetPromoterPageList
+* @Description: 查询
+* @param ctx
+ */
 func GetPromoterPageList(ctx iris.Context) {
 
 	var data promoter.Promoter
@@ -34,7 +37,10 @@ func GetPromoterPageList(ctx iris.Context) {
 
 }
 
-// 删除
+/*DeleteFormId
+* @Description: 删除
+* @param ctx
+ */
 func DeleteFormId(ctx iris.Context) {
 	var data promoter.Promoter
 	id, _ := ctx.Params().GetUint("ID")
@@ -46,7 +52,10 @@ func DeleteFormId(ctx iris.Context) {
 	app.OK(ctx, id, "删除成功")
 }
 
-// 修改
+/*PutData
+* @Description: 修改
+* @param ctx
+ */
 func PutData(ctx iris.Context) {
 	var data promoter.Promoter
 	// 读取id

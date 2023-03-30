@@ -34,7 +34,15 @@ func (e *Category) Create() (id int, err error) {
 	return
 }
 
-// 查寻
+/*GetPage
+* @Description:
+* @receiver e
+* @param n
+* @param s
+* @param end
+* @return Category
+* @return err
+ */
 func (e *Category) GetPage(n string, s string, end string) (Category []Category, err error) {
 	table := database.DB.Model(&e)
 
@@ -48,7 +56,13 @@ func (e *Category) GetPage(n string, s string, end string) (Category []Category,
 	return
 }
 
-// 修改
+/*Update
+* @Description: 修改
+* @receiver e
+* @param id
+* @return update
+* @return err
+ */
 func (e *Category) Update(id uint) (update Category, err error) {
 	if err = database.DB.Model(&e).First(&update, id).Error; err != nil {
 		return
@@ -61,7 +75,13 @@ func (e *Category) Update(id uint) (update Category, err error) {
 	return
 }
 
-// 删除
+/*Delete
+* @Description:删除
+* @receiver e
+* @param id
+* @return success
+* @return err
+ */
 func (e *Category) Delete(id uint) (success bool, err error) {
 	if err = database.DB.Model(&e).Where("id = ?", id).Delete(&Category{}).Error; err != nil {
 		success = false

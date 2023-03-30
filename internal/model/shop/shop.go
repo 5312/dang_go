@@ -2,7 +2,8 @@ package shop
 
 import "gorm.io/gorm"
 
-// 商品管理
+// Shop
+// @Description: 商品管理
 type Shop struct {
 	gorm.Model
 	Picture            string `json:"picture" gorm:"not null;comment:商品图片: json化数组"`
