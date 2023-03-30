@@ -1,7 +1,7 @@
 package sys
 
 import (
-	"dang_go/controller"
+	"dang_go/controller/shop"
 	"github.com/kataras/iris/v12/core/router"
 )
 
@@ -13,17 +13,21 @@ func RegisterShopRoute(v1 router.Party) {
 	//商户
 	{
 		// 商户
-		api.Post("/merchant/add", controller.InsterShop)      // 开户
-		api.Get("/merchant/list", controller.GetListShop)     // 商家列表
-		api.Put("/merchant/{ID:uint}", controller.UpMerchant) // 商家列表
+		api.Post("/merchant/add", shop.InsterShop)      // 开户
+		api.Get("/merchant/list", shop.GetListShop)     // 商家列表
+		api.Put("/merchant/{ID:uint}", shop.UpMerchant) // 商家列表
 
 	}
 	// 商品管理
 	{
+		// 发布 租赁 商品
+		api.Post("/rent/add", shop.AddLeaseCommodity)
+		api.Get("/rent/list", shop.GetLeaseCommodity)
+
 		// 租赁地址
-		api.Post("/address/lease/add/{ID:uint}", controller.AddLeaseAddress)
+		api.Post("/address/lease/add/{ID:uint}", shop.AddLeaseAddress)
 		// 归还地址
-		api.Post("/address/return/add/{ID:uint}", controller.AddReturnAddress)
+		api.Post("/address/return/add/{ID:uint}", shop.AddReturnAddress)
 
 	}
 }

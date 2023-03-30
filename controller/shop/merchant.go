@@ -1,4 +1,4 @@
-package controller
+package shop
 
 import (
 	"dang_go/internal/model/shop"

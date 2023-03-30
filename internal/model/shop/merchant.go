@@ -9,6 +9,7 @@ import (
 	"fmt"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/go-playground/validator/v10"
+	"github.com/gogf/gf/util/gconv"
 	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
 	"strings"
@@ -43,6 +44,29 @@ type Merchant struct {
 	AddressLease            *Medium `json:"address_lease" gorm:"type:json;租赁地址:数组类型的json数据"`
 	AddressReturn           *Medium `json:"address_return" gorm:"type:json;归还地址:数组类型的json字符串"`
 }
+type MerchantInfo struct {
+	CompanyName             string `json:"company_name" validate:"required" gorm:"not null;comment:企业名称"`
+	LegalRepresentativeName string `json:"legal_representative_name" validate:"required" gorm:"not null;comment:法定代表人名称"`
+	IdNumber                string `json:"id_number" validate:"required" gorm:"not null;comment:法人身份证号"`
+	Phone                   string `json:"phone" validate:"required" gorm:"not null;comment:联系电话"`
+	ConsumerHotline         string `json:"consumer_hotline" validate:"required" gorm:"not null;comment:客服电话"`
+	DetailAddress           string `json:"detail_address" validate:"required" gorm:"not null;comment:公司详情地址"`
+	CreditCode              string `json:"credit_code" validate:"required" gorm:"not null;comment:统一社会信用代码"`
+	UnIdNumberPng           string `json:"un_id_number_png" validate:"required" gorm:"not null;comment:身份证正反面"`
+	BusinessLicense         string `json:"business_license" validate:"required" gorm:"not null;comment:营业执照"`
+	ShopPicture             string `json:"shop_picture" validate:"required" gorm:"not null;comment:商铺图片"`
+	Avatar                  string `json:"avatar" validate:"required" gorm:"not null;comment:头像"`
+	Introduction            string `json:"introduction" validate:"required" gorm:"not null;comment:简介"`
+	City                    string `json:"city" validate:"required" gorm:"not null;comment:城市"`
+	ShopName                string `json:"shop_name" validate:"required" gorm:"not null;comment:商铺名称"`
+	ShopAdminName           string `json:"shop_admin_name" validate:"required" gorm:"not null;comment:开户的管理员名称"`
+	ShopAdminPhone          string `json:"shop_admin_phone" validate:"required" gorm:"not null;comment:开户的管理员电话"`
+	AlipayNumber            string `json:"alipay_number" validate:"required" gorm:"not null;comment:支付宝账户"`
+	AlipayName              string `json:"alipay_name" validate:"required" gorm:"not null;comment:支付宝账户名称"`
+	RentBalance             string `json:"rent_balance"  gorm:"comment:租金余额"`
+	WithdrawalRatio         string `json:"withdrawal_ratio"  gorm:"comment:提现比例"`
+	PurchasePrice           int    `json:"purchase_price"  gorm:"comment:商家采购价"`
+}
 
 // Medium []存放地址
 type Medium struct {
@@ -55,16 +79,6 @@ type Medium struct {
 	Name      string `json:"name"`
 	Phone     string `json:"phone"`
 }
-
-// 使用 Validate单例, 缓存结构体信息
-var validate *validator.Validate
-
-//// LoginResult
-//// @Description: 登录返回结构
-//type LoginResult struct {
-//	User  interface{} `json:"user"`
-//	Token string      `json:"token"`
-//}
 
 //goland:noinspection GoUnusedParameter
 func (e *Merchant) Login(name string, password string) (token tools.LoginResult, err error) {
@@ -93,8 +107,12 @@ func (e *Merchant) Login(name string, password string) (token tools.LoginResult,
 			Issuer:    "admin",                   //签名的发行者
 		},
 	}
-
-	generateTokens, err := tools.GenerateToken(claims)
+	var userInfo MerchantInfo
+	errgconv := gconv.Struct(shangjia[0], &userInfo)
+	if errgconv != nil {
+		fmt.Printf("结构体转化失败%v", errgconv)
+	}
+	generateTokens, err := tools.GenerateToken(claims, userInfo)
 
 	return generateTokens, nil
 }
