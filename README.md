@@ -12,3 +12,4 @@ rizla main.go
 
 ### config.yaml 配置文件 必须
 
+ctrl + alt + / 注释

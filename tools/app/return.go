@@ -8,6 +8,8 @@ import (
 var ErrorText = map[string]string{
 	"record not found": "找不到记录",
 	"EOF":              "请输入参数",
+	"response is nil or access_token is NULL": "access_token is Null", // 确认appid 是否对应
+	"WHERE conditions required":               "条件不存在",
 }
 
 /*OK 成功数据处理*/

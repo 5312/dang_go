@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
 )
 
@@ -52,7 +53,23 @@ type Medium struct {
 // 使用 Validate单例, 缓存结构体信息
 var validate *validator.Validate
 
-/*Create 开户 */
+// LoginResult
+// @Description: 登录返回结构
+type LoginResult struct {
+	User  interface{} `json:"user"`
+	Token string      `json:"token"`
+}
+
+func (e *Merchant) Login(name string, password string) (token LoginResult, err error) {
+	return
+}
+
+/*AddShop
+* @Description: 开户
+* @receiver e Merchant
+* @return id 返回id
+* @return err 错误处理
+ */
 func (e *Merchant) AddShop() (id int, err error) {
 	validate = validator.New()
 	verr := validate.Struct(e)
@@ -69,7 +86,12 @@ func (e *Merchant) AddShop() (id int, err error) {
 	return
 }
 
-/*GetPage 查*/
+/*GetPage
+* @Description:查询商户列表
+* @receiver *Merchant
+* @return Merchant
+* @return err
+ */
 func (e *Merchant) GetPage() (Merchant []Merchant, err error) {
 	table := database.DB.Model(&e)
 	//if err = table.Where("name like ?", "").Order("sort").Find(&User).Error; err != nil {
@@ -81,7 +103,13 @@ func (e *Merchant) GetPage() (Merchant []Merchant, err error) {
 	return
 }
 
-// 修改
+/*Update
+* @Description: 修改商户信息
+* @receiver e
+* @param id
+* @return update
+* @return err
+ */
 func (e *Merchant) Update(id uint) (update Merchant, err error) {
 	if err = database.DB.Model(&e).First(&update, id).Error; err != nil {
 		return
@@ -94,28 +122,46 @@ func (e *Merchant) Update(id uint) (update Merchant, err error) {
 	return
 }
 
-// ! 重要 为模型实现Value/Scan函数
-func (c Medium) Value() (driver.Value, error) {
-	b, err := json.Marshal(c)
+/*Value
+* @Description: ! 重要 为模型实现Value/Scan函数
+* @receiver c 方法接收者
+* @return driver.Value
+* @return error
+ */
+func (e *Medium) Value() (driver.Value, error) {
+	b, err := json.Marshal(e)
 	return string(b), err
 }
-
-func (c *Medium) Scan(input interface{}) error {
-	return json.Unmarshal(input.([]byte), c)
+func (e *Medium) Scan(input interface{}) error {
+	return json.Unmarshal(input.([]byte), e)
 }
 
-// 修改租赁地址
-func (e *Medium) UpdateAddress(id uint, data Medium) (success bool, err error) {
+/*UpdateAddress
+* @Description: 添加修改租赁地址
+* @receiver e
+* @param id
+* @param data
+* @param updateType
+* @return success
+* @return err
+ */
+func (e *Medium) UpdateAddress(id uint, data Medium, updateType string) (success bool, err error) {
 	var update Merchant
-
-	if err = database.DB.Model(&Merchant{}).Find(&update, id).Error; err != nil {
+	result := database.DB.Model(&Merchant{}).Find(&update, id)
+	if err = result.Error; err != nil {
 		fmt.Printf("err--", err)
 		success = false
 		return
 	}
+	if result.RowsAffected == 0 {
+		success = false
+		err = errors.New("找不到对应记录")
+		return
+	}
+
 	res, err := json.Marshal(data)
-	//fmt.Printf("获取json%v \n ", res)
-	if err = database.DB.Model(&Merchant{}).Model(&update).Update("address_lease", res).Error; err != nil {
+	fmt.Printf("获取json%v \n ", result.RowsAffected == 0)
+	if err = database.DB.Model(&Merchant{}).Model(&update).Update(updateType, res).Error; err != nil {
 		fmt.Printf("查询%v \n", err)
 		success = false
 		return

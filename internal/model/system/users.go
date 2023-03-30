@@ -80,9 +80,9 @@ func generateToken(user User) (LoginResult, error) {
 		Name:     user.Name,
 		Password: user.Password,
 		StandardClaims: jwtgo.StandardClaims{
-			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
-			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
-			Issuer:    "admin",                         //签名的发行者
+			NotBefore: int64(time.Now().Unix() - 1000),  // 签名生效时间
+			ExpiresAt: int64(time.Now().Unix() + 86400), // 过期时间6 *  6 * 24 24小时
+			Issuer:    "admin",                          //签名的发行者
 		},
 	}
 	token, err := j.CreateToken(claims)

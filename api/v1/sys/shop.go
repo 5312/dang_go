@@ -22,5 +22,8 @@ func RegisterShopRoute(v1 router.Party) {
 	{
 		// 租赁地址
 		api.Post("/address/lease/add/{ID:uint}", controller.AddLeaseAddress)
+		// 归还地址
+		api.Post("/address/return/add/{ID:uint}", controller.AddReturnAddress)
+
 	}
 }

@@ -6,9 +6,10 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-/*
-添加商户
-*/
+/*InsterShop
+* @Description: 添加商户
+* @param ctx
+ */
 func InsterShop(ctx iris.Context) {
 	// 接收参数
 	var data shop.Merchant
@@ -25,7 +26,10 @@ func InsterShop(ctx iris.Context) {
 	app.OK(ctx, result, "添加成功")
 }
 
-// 获取商户列表
+/*GetListShop
+* @Description: 获取商户列表
+* @param ctx
+ */
 func GetListShop(ctx iris.Context) {
 	// Get all records
 	var data shop.Merchant
@@ -39,7 +43,10 @@ func GetListShop(ctx iris.Context) {
 	app.OK(ctx, result, "查询成功")
 }
 
-// 商户修改
+/*UpMerchant
+* @Description: 商户修改
+* @param ctx
+ */
 func UpMerchant(ctx iris.Context) {
 	// 接收参数
 	var data shop.Merchant
@@ -56,7 +63,10 @@ func UpMerchant(ctx iris.Context) {
 	app.OK(ctx, result, "修改成功")
 }
 
-// 商户添加 地址
+/*AddLeaseAddress
+* @Description: 商户 添加 修改 租赁地址
+* @param ctx
+ */
 func AddLeaseAddress(ctx iris.Context) {
 	// 接收参数
 	var data shop.Medium
@@ -66,11 +76,31 @@ func AddLeaseAddress(ctx iris.Context) {
 		return
 	}
 
-	update, err := data.UpdateAddress(id, data)
+	update, err := data.UpdateAddress(id, data, "address_lease")
 
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return
 	}
-	app.OK(ctx, update, "添加成功")
+	app.OK(ctx, update, "操作成功")
+}
+
+// AddReturnAddress
+// @Description: {商户 添加 修改 归还地址}
+// @param ctx
+func AddReturnAddress(ctx iris.Context) {
+	// 接收参数
+	var data shop.Medium
+	id, _ := ctx.Params().GetUint("ID")
+	if err := ctx.ReadJSON(&data); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	update, err := data.UpdateAddress(id, data, "address_return")
+
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, update, "操作成功")
 }
