@@ -2,12 +2,17 @@ package shop
 
 import (
 	"dang_go/internal/database"
+	jwt "dang_go/middleware"
+	"dang_go/tools"
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/go-playground/validator/v10"
 	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
+	"strings"
+	"time"
 )
 
 // Merchant 商家
@@ -29,6 +34,7 @@ type Merchant struct {
 	ShopName                string  `json:"shop_name" validate:"required" gorm:"not null;comment:商铺名称"`
 	ShopAdminName           string  `json:"shop_admin_name" validate:"required" gorm:"not null;comment:开户的管理员名称"`
 	ShopAdminPhone          string  `json:"shop_admin_phone" validate:"required" gorm:"not null;comment:开户的管理员电话"`
+	PassWord                string  `json:"pass_word"  gorm:"not null;comment:密码默认电话后六位" `
 	AlipayNumber            string  `json:"alipay_number" validate:"required" gorm:"not null;comment:支付宝账户"`
 	AlipayName              string  `json:"alipay_name" validate:"required" gorm:"not null;comment:支付宝账户名称"`
 	RentBalance             string  `json:"rent_balance"  gorm:"comment:租金余额"`
@@ -53,16 +59,44 @@ type Medium struct {
 // 使用 Validate单例, 缓存结构体信息
 var validate *validator.Validate
 
-// LoginResult
-// @Description: 登录返回结构
-type LoginResult struct {
-	User  interface{} `json:"user"`
-	Token string      `json:"token"`
-}
+//// LoginResult
+//// @Description: 登录返回结构
+//type LoginResult struct {
+//	User  interface{} `json:"user"`
+//	Token string      `json:"token"`
+//}
 
 //goland:noinspection GoUnusedParameter
-func (e *Merchant) Login(name string, password string) (token LoginResult, err error) {
-	return
+func (e *Merchant) Login(name string, password string) (token tools.LoginResult, err error) {
+	var shangjia []Merchant
+	table := database.DB.Model(&e)
+
+	if err = table.Debug().Where("shop_admin_phone = ?", name).Where("pass_word = ?", password).Find(&shangjia).Error; err != nil {
+
+		return
+	}
+
+	if len(shangjia) <= 0 {
+		// 没有用户
+		err = errors.New("用户名不存在")
+		return
+	}
+
+	// 构造 CustomClaims 对象
+	claims := jwt.CustomClaims{
+		ID:       shangjia[0].ID,
+		Name:     shangjia[0].ShopAdminPhone,
+		Password: shangjia[0].PassWord,
+		StandardClaims: jwtgo.StandardClaims{
+			NotBefore: time.Now().Unix() - 1000,  // 签名生效时间
+			ExpiresAt: time.Now().Unix() + 86400, // 过期时间6 *  6 * 24 24小时
+			Issuer:    "admin",                   //签名的发行者
+		},
+	}
+
+	generateTokens, err := tools.GenerateToken(claims)
+
+	return generateTokens, nil
 }
 
 /*AddShop
@@ -72,6 +106,11 @@ func (e *Merchant) Login(name string, password string) (token LoginResult, err e
 * @return err 错误处理
  */
 func (e *Merchant) AddShop() (id int, err error) {
+	fmt.Printf("参数 %v \n", e.PassWord)
+	if e.PassWord == "" {
+		e.PassWord = e.getLastSixDigits()
+	}
+
 	validate = validator.New()
 	verr := validate.Struct(e)
 	if verr != nil {
@@ -85,6 +124,18 @@ func (e *Merchant) AddShop() (id int, err error) {
 		return
 	}
 	return
+}
+
+/*GetLastSixDigits
+* @Description: 获取后6位密码
+* @receiver u
+* @return string
+ */
+func (e *Merchant) getLastSixDigits() string {
+	if len(e.ShopAdminPhone) >= 6 {
+		return strings.TrimSpace(e.ShopAdminPhone[len(e.ShopAdminPhone)-6:])
+	}
+	return ""
 }
 
 /*GetPage
@@ -159,7 +210,10 @@ func (e *Medium) UpdateAddress(id uint, data Medium, updateType string) (success
 		err = errors.New("找不到对应记录")
 		return
 	}
-
+	// 转为 切片类型
+	//mediums := []Medium{
+	//	data,
+	//}
 	res, err := json.Marshal(data)
 	fmt.Printf("获取json%v \n ", result.RowsAffected == 0)
 	if err = database.DB.Model(&Merchant{}).Model(&update).Update(updateType, res).Error; err != nil {

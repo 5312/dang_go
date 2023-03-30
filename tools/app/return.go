@@ -10,6 +10,8 @@ var ErrorText = map[string]string{
 	"EOF":              "请输入参数",
 	"response is nil or access_token is NULL": "access_token is Null", // 确认appid 是否对应
 	"WHERE conditions required":               "条件不存在",
+	//TODO: 处理 前缀一样的都返回,要不然 字段不一样就会失效
+	"Key: 'Merchant.ShopAdminPhone' Error:Field validation for 'ShopAdminPhone' failed on the 'required' tag": "参数验证失败",
 }
 
 /*OK 成功数据处理*/

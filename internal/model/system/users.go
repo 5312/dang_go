@@ -54,20 +54,20 @@ type LoginResult struct {
 
 /*Login 登录*/
 func (e *User) Login(name string, password string) (token LoginResult, err error) {
-	var User []User
+	var Users []User
 	table := database.DB.Model(&e)
 
-	if err = table.Debug().Where("name = ?", name).Where("password = ?", password).Find(&User).Error; err != nil {
+	if err = table.Debug().Where("name = ?", name).Where("password = ?", password).Find(&Users).Error; err != nil {
 		return
 	}
 
-	if len(User) <= 0 {
+	if len(Users) <= 0 {
 		// 没有用户
 		err = errors.New("用户名不存在")
 		return
 	}
-	generateToken, err := generateToken(User[0])
-	return generateToken, nil
+	generateTokens, err := generateToken(Users[0])
+	return generateTokens, nil
 }
 
 // generateToken 生成令牌  创建jwt风格的token

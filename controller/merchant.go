@@ -75,7 +75,7 @@ func AddLeaseAddress(ctx iris.Context) {
 		app.Error(ctx, -1, err, "")
 		return
 	}
-
+	// 将用户添加到切片中
 	update, err := data.UpdateAddress(id, data, "address_lease")
 
 	if err != nil {
