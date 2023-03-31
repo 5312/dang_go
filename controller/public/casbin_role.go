@@ -7,6 +7,10 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
+/*Addrole
+* @Description: 添加规则
+* @param ctx
+ */
 func Addrole(ctx iris.Context) {
 
 	// 接收参数

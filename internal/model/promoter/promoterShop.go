@@ -5,10 +5,10 @@ import (
 	"dang_go/internal/database"
 	jwt "dang_go/middleware"
 	"dang_go/tools"
+	"errors"
 	"fmt"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gogf/gf/util/gconv"
-	"github.com/kataras/iris/v12/x/errors"
 	"gorm.io/gorm"
 	"time"
 )
@@ -24,7 +24,7 @@ type Promoter struct {
 	Alipay           string `json:"alipay"   gorm:"not null;comment:支付宝"`
 	AlipayName       string `json:"alipay_name"   gorm:"not null;comment:支付宝姓名"`
 }
-type PromoterInfo struct {
+type Info struct {
 	Name             string `json:"name" gorm:"not null;comment:推广商名称"`
 	AdminName        string `json:"admin_name"   gorm:"not null;comment:管理员姓名"`
 	AdminPhoneNumber string `json:"admin_phone_number"   gorm:"not null;comment:管理员手机号"`
@@ -54,48 +54,6 @@ func (e *Promoter) GetPage(name string) (Promoter []Promoter, err error) {
 	return
 }
 
-/*Login
-* @Description: 推广员登录
-* @receiver e
-* @param name
-* @param password
-* @return Promoter
-* @return err
- */
-func (e *Promoter) Login(name string, password string) (token tools.LoginResult, err error) {
-	var Promoter []Promoter
-
-	table := database.DB.Model(&e)
-	if err = table.Debug().Where("admin_phone_number = ?", name).Where("admin_password = ?", password).Find(&Promoter).Error; err != nil {
-		fmt.Printf("%v", err)
-		return
-	}
-	if len(Promoter) <= 0 {
-		// 没有用户
-		err = errors.New("用户名不存在")
-		return
-	}
-	// 构造 CustomClaims 对象
-	claims := jwt.CustomClaims{
-		ID:       Promoter[0].ID,
-		Name:     Promoter[0].Name,
-		Password: Promoter[0].AdminPassword,
-		StandardClaims: jwtgo.StandardClaims{
-			NotBefore: time.Now().Unix() - 1000,  // 签名生效时间
-			ExpiresAt: time.Now().Unix() + 86400, // 过期时间6 *  6 * 24 24小时
-			Issuer:    "admin",                   //签名的发行者
-		},
-	}
-	var promoterInfo PromoterInfo
-	errgconv := gconv.Struct(Promoter[0], &promoterInfo)
-	if err != nil {
-		fmt.Printf("转换失败%v", errgconv)
-	}
-
-	generateTokens, err := tools.GenerateToken(claims, promoterInfo)
-	return generateTokens, nil
-}
-
 /*Delete 删除 */
 func (e *Promoter) Delete(id uint) (err error) {
 	table := database.DB.Model(&e)
@@ -116,4 +74,46 @@ func (e *Promoter) Update(id uint) (update Promoter, err error) {
 		return
 	}
 	return
+}
+
+/*Login
+* @Description: 推广员登录
+* @receiver e
+* @param name
+* @param password
+* @return Promoter
+* @return err
+ */
+func (e *Promoter) Login(name string, password string) (token tools.LoginResult, err error) {
+	var Promoter []Promoter
+
+	table := database.DB.Model(&e)
+	if err = table.Where("admin_phone_number = ?", name).Where("admin_password = ?", password).Find(&Promoter).Error; err != nil {
+		fmt.Printf("%v", err)
+		return
+	}
+	if len(Promoter) <= 0 {
+		// 没有用户
+		err = errors.New("用户名不存在")
+		return
+	}
+	// 构造 CustomClaims 对象
+	claims := jwt.CustomClaims{
+		ID:       Promoter[0].ID,
+		Name:     Promoter[0].Name,
+		Password: Promoter[0].AdminPassword,
+		StandardClaims: jwtgo.StandardClaims{
+			NotBefore: time.Now().Unix() - 1000,  // 签名生效时间
+			ExpiresAt: time.Now().Unix() + 86400, // 过期时间6 *  6 * 24 24小时
+			Issuer:    "admin",                   //签名的发行者
+		},
+	}
+	var promoterInfo Info
+	errgconv := gconv.Struct(Promoter[0], &promoterInfo)
+	if err != nil {
+		fmt.Printf("转换失败%v", errgconv)
+	}
+
+	generateTokens, err := tools.GenerateToken(claims, promoterInfo)
+	return generateTokens, nil
 }

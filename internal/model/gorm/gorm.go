@@ -16,6 +16,8 @@ func AutoMigrate(db *gorm.DB) error {
 		new(shop.Shop),     // 上坪
 		new(shop.Category), // 分类
 
-		new(promoter.Promoter),
+		new(promoter.Promoter),  // 推广商
+		new(promoter.Personnel), // 推广员
+
 	)
 }

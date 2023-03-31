@@ -85,7 +85,7 @@ func (e *Merchant) Login(name string, password string) (token tools.LoginResult,
 	var shangjia []Merchant
 	table := database.DB.Model(&e)
 
-	if err = table.Debug().Where("shop_admin_phone = ?", name).Where("pass_word = ?", password).Find(&shangjia).Error; err != nil {
+	if err = table.Where("shop_admin_phone = ?", name).Where("pass_word = ?", password).Find(&shangjia).Error; err != nil {
 
 		return
 	}

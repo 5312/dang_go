@@ -2,6 +2,7 @@ package sys
 
 import (
 	"dang_go/controller"
+	"dang_go/controller/promoteShop"
 	"github.com/kataras/iris/v12/core/router"
 )
 
@@ -16,6 +17,15 @@ func RegisterPromoterRoute(v1 router.Party) {
 		api.Get("/list", controller.GetPromoterPageList)
 		api.Delete("/{ID:uint}", controller.DeleteFormId)
 		api.Put("/{ID:uint}", controller.PutData)
+
+	}
+	// 推广员
+	promoter := api.Party("/personnel")
+	{
+		promoter.Post("/add", promoteShop.AddToPromotePersonnel)            // 添加推广员
+		promoter.Get("/list", promoteShop.GetToPromotePersonnel)            // 推广员列表
+		promoter.Delete("/{ID:uint}", promoteShop.DeleteToPromotePersonnel) // 删除推广员
+		promoter.Put("/{ID:uint}", promoteShop.UpToPromotePersonnel)        // 修改推广员
 
 	}
 }

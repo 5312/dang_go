@@ -62,7 +62,7 @@ func (e *User) Login(name string, password string) (token tools.LoginResult, err
 	var Users []User
 	table := database.DB.Model(&e)
 
-	if err = table.Debug().Where("name = ?", name).Where("password = ?", password).Find(&Users).Error; err != nil {
+	if err = table.Where("name = ?", name).Where("password = ?", password).Find(&Users).Error; err != nil {
 		return
 	}
 

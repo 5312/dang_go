@@ -16,6 +16,7 @@ func RegisterPublicRoute(v1 router.Party) {
 	{
 		// 上传图片
 		api.Post("/upload/image", public.UploadImage)
+		// 添加规则
 		api.Post("/permissions/add", public.Addrole)
 
 	}
