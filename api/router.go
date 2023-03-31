@@ -18,9 +18,10 @@ func InitSysRouter(app *iris.Application) {
 	v1 := app.Party("/v1")
 	{
 		// 登录  跳过jwt
-		v1.Post("/login", controller.Login)              // 平台
-		v1.Post("/alipay/login", controller.AlipayLogin) // 支付宝
-		v1.Post("/shop/login", controller.ShopLogin)     // 商户
+		v1.Post("/login", controller.Login)                  // 平台
+		v1.Post("/alipay/login", controller.AlipayLogin)     // 支付宝
+		v1.Post("/shop/login", controller.ShopLogin)         // 商户
+		v1.Post("/promoter/login", controller.PromoterLogin) // 推广商
 
 	}
 	{

@@ -68,7 +68,7 @@ func (e *User) Login(name string, password string) (token tools.LoginResult, err
 
 	if len(Users) <= 0 {
 		// 没有用户
-		err = errors.New("用户名不存在")
+		err = errors.New("用户不存在")
 		return
 	}
 	// 构造 CustomClaims 对象

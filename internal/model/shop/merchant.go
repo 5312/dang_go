@@ -92,7 +92,7 @@ func (e *Merchant) Login(name string, password string) (token tools.LoginResult,
 
 	if len(shangjia) <= 0 {
 		// 没有用户
-		err = errors.New("用户名不存在")
+		err = errors.New("用户不存在")
 		return
 	}
 
