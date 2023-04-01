@@ -44,11 +44,12 @@ type Shop struct {
 	IsSearch  bool `json:"is_search" gorm:"not null;comment:是否可被搜索"`
 	//物流信息
 	LeaseAddress  string `json:"lease_address"  validate:"required"  gorm:"comment:发货地址;"`
-	returnAddress string `json:"return_address"  validate:"required"  gorm:"comment:归还地址;"`
+	ReturnAddress string `json:"return_address"  validate:"required"  gorm:"comment:归还地址;"`
 	// 其他
-	Sort int    `json:"sort" gorm:"comment:排序"`
-	Type int    `json:"type" gorm:"comment:类型"`
-	Unit string `json:"unit" gorm:"comment:单位"`
+	Sort   int    `json:"sort" gorm:"comment:排序"`
+	Type   int    `json:"type" gorm:"comment:类型"`
+	Unit   string `json:"unit" gorm:"comment:单位"`
+	Status string `json:"status" gorm:"comment:商品状态:已上架|审核中|已下架|未通过|草稿箱"`
 }
 
 /*AddLeaseShop

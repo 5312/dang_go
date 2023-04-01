@@ -11,10 +11,6 @@ import (
 
 var DB *gorm.DB
 
-type Database interface {
-	InitGormDB() (db *sql.DB)
-}
-
 type Mysql struct {
 }
 

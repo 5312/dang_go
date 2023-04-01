@@ -5,11 +5,8 @@ import (
 	"dang_go/api/v1/public"
 	"dang_go/api/v1/sys"
 	"dang_go/controller"
-	"github.com/iris-contrib/swagger/v12"
-	"github.com/iris-contrib/swagger/v12/swaggerFiles"
-	"github.com/kataras/iris/v12"
-
 	_ "dang_go/docs"
+	"github.com/kataras/iris/v12"
 )
 
 // InitSysRouter 初始化api接口
@@ -25,8 +22,6 @@ func InitSysRouter(app *iris.Application) {
 
 	}
 	{
-		//权限验证
-		//v1.Use(middleware.JWTAuth)
 		// sys
 		sys.RegisterMenuRoute(v1)     // 菜单
 		sys.RegisterShopRoute(v1)     // 商户
@@ -35,15 +30,9 @@ func InitSysRouter(app *iris.Application) {
 
 		// 小程序
 		apialipay.RegisterShopCategoryRoute(v1) // 分类
+		apialipay.RegisterAppLetsRoute(v1)      // banner图
 		//公共接口
 		public.RegisterPublicRoute(v1)
 	}
-	/* swagger文档*/
-	// 指向swagger init生成文档的路径
-	//config := &swagger.Config{
-	//	URL:         "http://localhost:87/docs/swagger.json",
-	//	DeepLinking: true,
-	//}
-	//app.Get("/swagger/*any", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
-	app.Get("/swagger/index.html", swagger.WrapHandler(swaggerFiles.Handler))
+
 }

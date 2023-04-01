@@ -1,6 +1,7 @@
 package gorm
 
 import (
+	"dang_go/internal/model/applets"
 	"dang_go/internal/model/promoter"
 	"dang_go/internal/model/shop"
 	"dang_go/internal/model/system"
@@ -18,6 +19,7 @@ func AutoMigrate(db *gorm.DB) error {
 
 		new(promoter.Promoter),  // 推广商
 		new(promoter.Personnel), // 推广员
-
+		// 小程序
+		new(applets.HomeImg), // banner图
 	)
 }
