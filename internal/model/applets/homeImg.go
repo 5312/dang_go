@@ -21,7 +21,7 @@ type HomeImg struct {
 	Link         string `json:"link" validate:"required" gorm:"comment:链接"`
 	OutAppId     string `json:"out_app_id" gorm:"comment:外部appid"`
 	OutViewRoute string `json:"out_view_route" gorm:"comment:外部页面路径"`
-	Type         int    `json:"type"  validate:"required,oneof=1 2 3" gorm:"not null;comment:图片所属类型:1banner 2category 3排列图"`
+	Type         int    `json:"type"  validate:"required,oneof=1 2 3 4 5 6" gorm:"not null;comment:图片所属类型:1banner 2category 3排列图 4 5 6 为iphone 13 11 12 行"`
 }
 
 /*Create 增 */
@@ -62,9 +62,16 @@ func (h *HomeImg) Update(id uint) (update HomeImg, err error) {
 * @return list
 * @return err
  */
-func (h *HomeImg) GetBannerList() (list []HomeImg, err error) {
+func (h *HomeImg) GetBannerList(types string) (list []HomeImg, err error) {
 	table := database.DB.Model(&h)
-	if err = table.Find(&list).Error; err != nil {
+
+	if types == "" {
+		if err = table.Find(&list).Error; err != nil {
+			return
+		}
+		return
+	}
+	if err = table.Debug().Where("type = ?", types).Find(&list).Error; err != nil {
 		return
 	}
 	return

@@ -3,6 +3,7 @@ package conalipay
 import (
 	"dang_go/internal/model/applets"
 	"dang_go/tools/app"
+	"fmt"
 	"github.com/kataras/iris/v12"
 )
 
@@ -31,8 +32,9 @@ func AddBanner(ctx iris.Context) {
 func GetBanner(ctx iris.Context) {
 	// Get all records
 	var data applets.HomeImg
-
-	result, err := data.GetBannerList()
+	types := ctx.URLParam("type") //Params().GetInt("type")
+	result, err := data.GetBannerList(types)
+	fmt.Printf("types %v", types)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return
