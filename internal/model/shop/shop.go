@@ -89,3 +89,15 @@ func (s *Shop) GetMyShopList(userInfo *middleware.CustomClaims) (list []Shop, er
 
 	return
 }
+
+/*GetCategoryShopList
+* @Description: 根据分类id 获取商品列表
+* @receiver s
+ */
+func (s *Shop) GetCategoryShopList(id string) (list []Shop, err error) {
+	table := database.DB.Model(&s)
+	if err = table.Debug().Where("object_category = ?", id).Order("sort").Find(&list).Error; err != nil {
+		return
+	}
+	return
+}

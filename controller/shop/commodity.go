@@ -30,7 +30,7 @@ func AddLeaseCommodity(ctx iris.Context) {
 }
 
 /*GetLeaseCommodity
-* @Description: 商品列表
+* @Description: 我的 租赁商品列表
 * @param ctx
 * @return {}
  */
@@ -39,6 +39,23 @@ func GetLeaseCommodity(ctx iris.Context) {
 	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
 	var list shop.Shop
 	rest, err := list.GetMyShopList(userInfo)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, rest, "请求成功")
+}
+
+/*GetAllCategoryList
+* @Description: 获取全部分类商品列表
+* @param ctx
+ */
+func GetAllCategoryList(ctx iris.Context) {
+	//var userInfo middleware.CustomClaims
+	//userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	id := ctx.URLParam("tid")
+	var list shop.Shop
+	rest, err := list.GetCategoryShopList(id)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return

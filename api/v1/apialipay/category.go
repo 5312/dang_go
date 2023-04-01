@@ -4,6 +4,7 @@ package apialipay
 
 import (
 	"dang_go/controller/conalipay"
+	"dang_go/controller/shop"
 	"github.com/kataras/iris/v12/core/router"
 )
 
@@ -17,5 +18,9 @@ func RegisterShopCategoryRoute(v1 router.Party) {
 		api.Put("/category/{ID:uint}", conalipay.Update)
 		api.Delete("/category/{ID:uint}", conalipay.Delete)
 
+	}
+	{
+		// 根据分类获取商品
+		api.Get("/cate-shop/list", shop.GetAllCategoryList)
 	}
 }
