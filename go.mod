@@ -7,8 +7,8 @@ require (
 	github.com/casbin/gorm-adapter/v3 v3.15.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-pay/gopay v1.5.91
+	github.com/go-playground/validator/v10 v10.12.0
 	github.com/gogf/gf v1.16.9
-	github.com/iris-contrib/swagger/v12 v12.2.0-alpha
 	github.com/kataras/iris/v12 v12.2.0-beta6
 	github.com/spf13/viper v1.13.0
 	github.com/swaggo/swag v1.8.10
@@ -38,7 +38,6 @@ require (
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.12.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect

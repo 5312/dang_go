@@ -68,7 +68,6 @@ func (p *Personnel) Update(id uint) (update Personnel, err error) {
  */
 func (p *Personnel) GetMyPersonnelList(userInfo *middleware.CustomClaims) (list []Personnel, err error) {
 	table := database.DB.Model(&p)
-	//fmt.Printf("userinof -- %v", userInfo.ID)
 	if err = table.Where("from_promoter = ?", userInfo.ID).Find(&list).Error; err != nil {
 		return
 	}
