@@ -12,7 +12,11 @@ func RegisterAppLetsRoute(v1 router.Party) {
 		// banner
 		api.Post("/home-img/add", conalipay.AddBanner)         // 添加banner
 		api.Get("/home-img/list", conalipay.GetBanner)         // 获取banner
-		api.Put("/home-img/{ID:uint}", conalipay.UpdateBanner) // 获取banner
+		api.Put("/home-img/{ID:uint}", conalipay.UpdateBanner) // 修改banner
+
+		// 商品添加至 推荐
+		api.Get("/recommend/add", conalipay.AddRecommend)
+		api.Get("/recommend/list", conalipay.GetRecommend) // 获取活动上坪
 
 	}
 }

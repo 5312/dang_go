@@ -63,3 +63,36 @@ func UpdateBanner(ctx iris.Context) {
 	}
 	app.OK(ctx, result, "修改成功")
 }
+
+/*AddRecommend
+* @Description: 添加商品至活动
+* @param ctx
+* @return {}
+ */
+func AddRecommend(ctx iris.Context) {
+	var addData applets.RecommendProduct
+	id := ctx.URLParam("shopid")
+
+	result, err := addData.AddFromShopList(id)
+
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "修改成功")
+}
+
+/*GetRecommend
+* @Description: 获取活动商品
+* @param ctx
+* @return {}
+ */
+func GetRecommend(ctx iris.Context) {
+	var addData applets.RecommendProduct
+	result, err := addData.GetRecommend()
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "修改成功")
+}
