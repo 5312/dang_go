@@ -2,6 +2,7 @@ package apialipay
 
 import (
 	"dang_go/controller/conalipay"
+	"dang_go/controller/shop"
 	"github.com/kataras/iris/v12/core/router"
 )
 
@@ -18,5 +19,11 @@ func RegisterAppLetsRoute(v1 router.Party) {
 		api.Get("/recommend/add", conalipay.AddRecommend)
 		api.Get("/recommend/list", conalipay.GetRecommend) // 获取活动上坪
 
+	}
+
+	// 支付宝sdk
+	{
+		api.Post("/authentication", conalipay.AlipayUserCertifyOpenInitializeRequest) // 人脸身份认证
+		api.Post("/pay-order/{OID:uint}/{RID:uint}", shop.PayOrder)                   // 支付 oid订单id 和账单rid
 	}
 }

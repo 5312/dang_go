@@ -23,6 +23,7 @@ func RegisterShopRoute(v1 router.Party) {
 		// 发布 租赁 商品
 		api.Post("/rent/add", shop.AddLeaseCommodity)
 		api.Get("/rent/list", shop.GetLeaseCommodity)
+		api.Get("/rent/{ID:uint}", shop.GetShopDetail)
 
 		// 租赁地址
 		api.Post("/address/lease/add/{ID:uint}", shop.AddLeaseAddress)

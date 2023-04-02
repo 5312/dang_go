@@ -94,9 +94,24 @@ func (s *Shop) GetMyShopList(userInfo *middleware.CustomClaims) (list []Shop, er
 * @Description: 根据分类id 获取商品列表
 * @receiver s
  */
-func (s *Shop) GetCategoryShopList(id string) (list []Shop, err error) {
+func (s *Shop) GetCategoryShopList(cateId string) (list []Shop, err error) {
 	table := database.DB.Model(&s)
-	if err = table.Debug().Where("object_category = ?", id).Order("sort").Find(&list).Error; err != nil {
+	if err = table.Debug().Where("object_category = ?", cateId).Order("sort").Find(&list).Error; err != nil {
+		return
+	}
+	return
+}
+
+/*GetDetail
+* @Description:获取商品详情
+* @receiver s
+* @param shopId
+* @return list
+* @return err
+ */
+func (s *Shop) GetDetail(shopId uint) (list Shop, err error) {
+	table := database.DB.Model(&s)
+	if err = table.Debug().Where("id = ?", shopId).Find(&list).Error; err != nil {
 		return
 	}
 	return

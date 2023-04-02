@@ -32,7 +32,7 @@ func InitSysRouter(app *iris.Application) {
 		apialipay.RegisterShopCategoryRoute(v1) // 分类
 		apialipay.RegisterAppLetsRoute(v1)      // banner图
 		//公共接口
-		public.RegisterPublicRoute(v1)
+		public.RegisterPublicRoute(v1) // 文件上传
 	}
 
 }

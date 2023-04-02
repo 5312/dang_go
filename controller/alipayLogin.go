@@ -3,8 +3,10 @@ package controller
 import (
 	"dang_go/internal/model/system"
 	jwt "dang_go/middleware"
+	"dang_go/tools"
 	"dang_go/tools/app"
 	"encoding/json"
+	"fmt"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/go-pay/gopay/alipay"
 	"github.com/kataras/iris/v12"
@@ -93,8 +95,20 @@ func AlipayLogin(ctx iris.Context) {
 		ZfbUserId:     success.Response.UserId,
 		Avatar:        jsonData.Response.Avatar,
 	}
+	fmt.Printf("userid: %v \n", success.Response.UserId)
 	createErr := mem.Create(success.Response.UserId)
-	tokens, tokenErr := generateToken(mem)
+
+	claims := jwt.CustomClaims{
+		ID:       mem.ID,
+		Name:     mem.Name,
+		Password: mem.ZfbUserId,
+		StandardClaims: jwtgo.StandardClaims{
+			NotBefore: time.Now().Unix() - 1000, // 签名生效时间
+			ExpiresAt: time.Now().Unix() + 3600, // 过期时间 一小时
+			Issuer:    "admin",                  //签名的发行者
+		},
+	}
+	tokenObj, tokenErr := tools.GenerateToken(claims, mem)
 	if tokenErr != nil {
 		app.Error(ctx, -1, tokenErr, "")
 		return
@@ -105,33 +119,12 @@ func AlipayLogin(ctx iris.Context) {
 		AccessToken:  success.Response.AccessToken,
 		UserId:       success.Response.UserId,
 		User:         mem,
-		Token:        tokens,
+		Token:        tokenObj.Token,
 	}
-
 	if createErr != nil {
 		app.Error(ctx, -1, createErr, "")
 		return
 	}
 	app.OK(ctx, requestData, "登录成功")
-	//app.OK(ctx, success, "登录成功")
 
-}
-
-// generateToken 生成令牌  创建jwt风格的token
-func generateToken(user system.Member) (token string, err error) {
-	j := &jwt.JWT{
-		SigningKey: []byte("newtrekWang"),
-	}
-	claims := jwt.CustomClaims{
-		ID:       user.ID,
-		Name:     user.Name,
-		Password: user.ZfbUserId,
-		StandardClaims: jwtgo.StandardClaims{
-			NotBefore: time.Now().Unix() - 1000, // 签名生效时间
-			ExpiresAt: time.Now().Unix() + 3600, // 过期时间 一小时
-			Issuer:    "admin",                  //签名的发行者
-		},
-	}
-	token, err = j.CreateToken(claims)
-	return
 }

@@ -1,3 +1,6 @@
 package shop
 
-// 订单信息
+// Order
+// @Description:订单
+type Order struct {
+}

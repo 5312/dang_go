@@ -62,3 +62,18 @@ func GetAllCategoryList(ctx iris.Context) {
 	}
 	app.OK(ctx, rest, "请求成功")
 }
+
+/*GetShopDetail
+* @Description: 获取商品详情
+* @param ctx
+ */
+func GetShopDetail(ctx iris.Context) {
+	id, _ := ctx.Params().GetUint("ID")
+	var detail shop.Shop
+	result, err := detail.GetDetail(id)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "请求成功")
+}
