@@ -17,7 +17,7 @@ import (
 func EnforcerTool() *casbin.Enforcer {
 	adapter, _ := gormadapter.NewAdapterByDB(database.DB)
 
-	Enforce, err := casbin.NewEnforcer("rbac_model.conf", adapter)
+	Enforce, err := casbin.NewEnforcer("config/rbac_model.conf", adapter)
 
 	if err != nil {
 		fmt.Printf("%v \n ", "策略初始化失败")

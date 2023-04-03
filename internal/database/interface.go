@@ -1,7 +1,10 @@
 package database
 
-import "database/sql"
+import (
+	"gorm.io/gorm"
+)
 
 type Database interface {
-	InitGormDB() (db *sql.DB)
+	Open(dialector gorm.Dialector, conn gorm.Option) (db *gorm.DB, err error)
+	GetConnect() string
 }

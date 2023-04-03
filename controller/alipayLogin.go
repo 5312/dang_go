@@ -62,7 +62,6 @@ func AlipayLogin(ctx iris.Context) {
 		return
 	}
 	//fmt.Printf("%v 序列化 \n", jsonData.Response.Code)
-	// TODO: 密钥暂定读取,以后需要加密
 	// 换取授权访问令牌（默认使用utf-8，RSA2）
 	// appId：应用ID
 	// privateKey：应用私钥，支持PKCS1和PKCS8

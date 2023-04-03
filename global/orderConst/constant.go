@@ -1,0 +1,38 @@
+package orderConst
+
+// 1待付款 2待风控 3待发货 4待收货 5待归还 6归还中 7交易完成 8买断订单
+// 9订单关闭（用户）10订单关闭（超时系统关闭）11订单关闭（商家）
+// 12订单关闭（全部，用于查询所有关闭订单）13即将到期 14申请关闭
+
+var ORDER_STATUS_TO_PAY = 1
+
+var ORDER_STATUS_TO_RISK = 2
+
+var ORDER_STATUS_TO_DELIVER = 3
+
+var ORDER_STATUS_TO_RECEIVED = 4
+
+var ORDER_STATUS_TO_RETURN = 5
+
+var ORDER_STATUS_TO_RETURNING = 6
+
+var ORDER_STATUS_COMPLETE = 7
+
+var ORDER_STATUS_BUYOUT = 8
+
+var ORDER_STATUS_CLOSE_USER = 9
+
+var ORDER_STATUS_CLOSE_SYSTEM = 10
+
+var ORDER_STATUS_CLOSE_MERCHANT = 11
+
+var ORDER_STATUS_DUE = 13
+
+var ORDER_STATUS_REQUEST_CLOSE = 14
+
+// 支付平台 1微信 2支付宝 3网银
+var PAY_PLATFORM_WECHAT = 1
+
+var PAY_PLATFORM_ALIPAY = 2
+
+var PAY_PLATFORM_BANK = 3

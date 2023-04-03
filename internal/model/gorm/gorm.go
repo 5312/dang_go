@@ -18,6 +18,7 @@ func AutoMigrate(db *gorm.DB) error {
 		new(shop.Category),      // 分类
 		new(promoter.Promoter),  // 推广商
 		new(promoter.Personnel), // 推广员
+		new(shop.Order),         // 订单
 		// 小程序
 		new(applets.HomeImg),          // banner图
 		new(applets.RecommendProduct), // 推荐
