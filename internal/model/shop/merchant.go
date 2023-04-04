@@ -173,6 +173,20 @@ func (e *Merchant) GetPage() (Merchant []Merchant, err error) {
 	return
 }
 
+/*GetDetail
+* @Description: 商家详情
+* @receiver e
+ */
+func (e *Merchant) GetDetail(sid uint) (list []Merchant, err error) {
+	table := database.DB.Model(&e)
+	result := table.Where("id = ?", sid).Find(&list)
+
+	if err = result.Error; err != nil {
+		return
+	}
+	return
+}
+
 /*Update
 * @Description: 修改商户信息
 * @receiver e

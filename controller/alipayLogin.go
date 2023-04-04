@@ -6,7 +6,6 @@ import (
 	"dang_go/tools"
 	"dang_go/tools/app"
 	"encoding/json"
-	"fmt"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/go-pay/gopay/alipay"
 	"github.com/kataras/iris/v12"
@@ -94,11 +93,11 @@ func AlipayLogin(ctx iris.Context) {
 		ZfbUserId:     success.Response.UserId,
 		Avatar:        jsonData.Response.Avatar,
 	}
-	fmt.Printf("userid: %v \n", success.Response.UserId)
-	createErr := mem.Create(success.Response.UserId)
+	//fmt.Printf("userid: %v \n", success.Response.UserId)
+	cid, createErr := mem.Create(success.Response.UserId)
 
 	claims := jwt.CustomClaims{
-		ID:       mem.ID,
+		ID:       cid,
 		Name:     mem.Name,
 		Password: mem.ZfbUserId,
 		StandardClaims: jwtgo.StandardClaims{

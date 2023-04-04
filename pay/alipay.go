@@ -2,6 +2,7 @@ package pay
 
 import (
 	"dang_go/internal/model/shop"
+	"dang_go/middleware"
 	"dang_go/tools/app"
 	"fmt"
 	"github.com/go-pay/gopay"
@@ -33,10 +34,47 @@ func SaveOrder(ctx iris.Context) {
 		app.Error(ctx, -1, err, "")
 		return
 	}
-	ormCr, err := params.Create()
+	id := ctx.Values().Get("claims").(*middleware.CustomClaims)
+
+	ormCr, err := params.Create(id.ID)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return
 	}
 	app.OK(ctx, ormCr, "添加成功")
+}
+
+/*OrderPage
+* @Description: 订单列表
+ */
+func OrderPage(ctx iris.Context) {
+	var order shop.Order
+	// 会员id
+	id := ctx.Values().Get("claims").(*middleware.CustomClaims)
+
+	result, err := order.GetPage(id.ID)
+
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "查询成功")
+}
+
+/*OrderDetail
+* @Description: 查询订单详情
+* @param ctx
+ */
+func OrderDetail(ctx iris.Context) {
+	var order shop.Order
+	// 会员id
+	id, err := ctx.Params().GetUint("OID")
+
+	result, errs := order.GetOrderDetail(id)
+
+	if errs != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "查询成功")
 }

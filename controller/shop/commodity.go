@@ -77,3 +77,33 @@ func GetShopDetail(ctx iris.Context) {
 	}
 	app.OK(ctx, result, "请求成功")
 }
+
+/*GetMerchantDetail
+* @Description: 查询商家
+* @param ctx
+ */
+func GetMerchantDetail(ctx iris.Context) {
+	sid, _ := ctx.Params().GetUint("SID")
+	var detail shop.Merchant
+	result, err := detail.GetDetail(sid)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "请求成功")
+}
+
+/*GetMerchantShop
+* @Description: 查询商家商品
+* @param ctx
+ */
+func GetMerchantShop(ctx iris.Context) {
+	sid, _ := ctx.Params().GetUint("SID")
+	var detail shop.Shop
+	result, err := detail.GetMerchantShop(sid)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "请求成功")
+}

@@ -23,18 +23,23 @@ type Member struct {
 	InflowStatus  string `json:"inflow_status" gorm:"comment:入流状态:1搜索 2平台扫码;"`
 	ZfbUserId     string `json:"zfb_user_id" gorm:"not null;comment:支付宝user_id"`
 	Avatar        string `json:"avatar" gorm:"comment:头像"`
+	Lng           string `json:"lng" gorm:"comment:下单时经度"`
+	Lat           string `json:"lat" gorm:"comment:下单时纬度"`
 }
 
 /*Create 增 */
-func (e *Member) Create(ID string) (err error) {
+func (e *Member) Create(ID string) (id uint, err error) {
 	// 先查询
 	var Id []Member
 	database.DB.Model(&e).Where("zfb_user_id = ?", ID).Find(&Id)
 	if len(Id) != 0 {
-		//fmt.Printf("会员已添加不重复添加")
+		//fmt.Printf("会员已添加不重复添加", Id[0].ID)
+		id = Id[0].ID
 		return
 	}
 	result := database.DB.Create(&e)
+	//fmt.Printf("擦汗如%v", e.ID)
+	id = e.ID
 	if result.Error != nil {
 		err = result.Error
 		return
@@ -49,5 +54,22 @@ func (e *Member) GetPage() (Member []Member, err error) {
 	if err = table.Find(&Member).Error; err != nil {
 		return
 	}
+	return
+}
+
+/*Update 改 */
+func (e *Member) Update(id uint) (update Member, err error) {
+	table := database.DB.Model(&e)
+
+	result := table.Where("id = ?", id).Updates(&e)
+
+	if err = result.Error; err != nil {
+		return
+	}
+
+	if err = table.First(&update, id).Error; err != nil {
+		return
+	}
+
 	return
 }

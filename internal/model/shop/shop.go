@@ -116,3 +116,18 @@ func (s *Shop) GetDetail(shopId uint) (list Shop, err error) {
 	}
 	return
 }
+
+/*GetMerchantShop
+* @Description: 根据商家查商品
+* @receiver e
+* @param sid
+* @return list
+* @return err
+ */
+func (s *Shop) GetMerchantShop(sid uint) (list []Shop, err error) {
+	table := database.DB.Model(&s)
+	if err = table.Where("from_shops = ?", sid).Order("sort").Find(&list).Error; err != nil {
+		return
+	}
+	return
+}

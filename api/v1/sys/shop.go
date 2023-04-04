@@ -13,17 +13,19 @@ func RegisterShopRoute(v1 router.Party) {
 	//商户
 	{
 		// 商户
-		api.Post("/merchant/add", shop.InsterShop)      // 开户
-		api.Get("/merchant/list", shop.GetListShop)     // 商家列表
-		api.Put("/merchant/{ID:uint}", shop.UpMerchant) // 商家列表
+		api.Post("/merchant/add", shop.InsterShop)                      // 开户
+		api.Get("/merchant/list", shop.GetListShop)                     // 商家列表
+		api.Put("/merchant/{ID:uint}", shop.UpMerchant)                 // 商家列表
+		api.Post("/merchant/{SID:uint}/detail", shop.GetMerchantDetail) // 查询商家
+		api.Get("/merchant/{SID:uint}/shop", shop.GetMerchantShop)      // 查询商家商品
 
 	}
 	// 商品管理
 	{
 		// 发布 租赁 商品
-		api.Post("/rent/add", shop.AddLeaseCommodity)
-		api.Get("/rent/list", shop.GetLeaseCommodity)
-		api.Get("/rent/{ID:uint}", shop.GetShopDetail)
+		api.Post("/rent/add", shop.AddLeaseCommodity)  // 添加商品
+		api.Get("/rent/list", shop.GetLeaseCommodity)  // 商品列表
+		api.Get("/rent/{ID:uint}", shop.GetShopDetail) // 商品详情
 
 		// 租赁地址
 		api.Post("/address/lease/add/{ID:uint}", shop.AddLeaseAddress)
