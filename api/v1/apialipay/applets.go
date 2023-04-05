@@ -32,6 +32,7 @@ func RegisterAppLetsRoute(v1 router.Party) {
 		api.Post("/save-order", pay.SaveOrder)                 // 保存订单
 		api.Get("/order/list", pay.OrderPage)                  // 查看订单列表
 		api.Get("/order/{OID:uint}/detail", pay.OrderDetail)   // 查看订单列表
+		api.Post("/order/{OID:uint}/cancel", pay.OrderCancel)  // 用户取消订单
 
 	}
 }

@@ -28,4 +28,8 @@ func RegisterPromoterRoute(v1 router.Party) {
 		promoter.Put("/{ID:uint}", promoteShop.UpToPromotePersonnel)        // 修改推广员
 
 	}
+	// 订单
+	{
+		promoter.Get("/order/list", promoteShop.OrderList) // 订单列表
+	}
 }

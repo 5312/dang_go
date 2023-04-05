@@ -78,3 +78,22 @@ func OrderDetail(ctx iris.Context) {
 	}
 	app.OK(ctx, result, "查询成功")
 }
+
+/*OrderCancel
+* @Description: 取消订单
+* @param ctx
+* @return {}
+ */
+func OrderCancel(ctx iris.Context) {
+	var order shop.Order
+	// 订单id
+	id, err := ctx.Params().GetUint("OID")
+
+	result, errs := order.Cancel(id)
+
+	if errs != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "取消成功")
+}
