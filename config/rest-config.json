@@ -1,0 +1,9 @@
+{
+  "RestUrl": "https://rest.baas.alipay.com",
+  "AccessId": "baas_admin",
+  "AccessSecret": "/Users/Documents/go_workspace/src/gitlab.alipay-inc.com/antchain/restclient-go-sdk/test/access.key",
+  "MaxIdleConns": 10,
+  "IdleConnTimeout": 30,
+  "RetryMaxAttempts": 5,
+  "BackOffPeriod": 500
+}

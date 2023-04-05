@@ -14,7 +14,9 @@ require (
 	github.com/swaggo/swag v1.8.10
 	gorm.io/driver/mysql v1.4.3
 	gorm.io/gorm v1.24.1
+	gitlab.alipay-inc.com/antchain/restclient-go-sdk v1.0.0
 )
+replace gitlab.alipay-inc.com/antchain/restclient-go-sdk =>  F:/Monorepo/dang_go/SDK/restclient-go-sdk
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
