@@ -18,6 +18,8 @@ func RegisterShopRoute(v1 router.Party) {
 		api.Put("/merchant/{ID:uint}", shop.UpMerchant)                 // 商家列表
 		api.Post("/merchant/{SID:uint}/detail", shop.GetMerchantDetail) // 查询商家
 		api.Get("/merchant/{SID:uint}/shop", shop.GetMerchantShop)      // 查询商家商品
+		api.Get("/merchant/order", shop.GetMerchantOrderCount)          // 查询商家 累计订单数
+		api.Get("/merchant/order", shop.GetMerchantOrder)               // 查询商家订单列表
 
 	}
 	// 商品管理
@@ -26,6 +28,7 @@ func RegisterShopRoute(v1 router.Party) {
 		api.Post("/rent/add", shop.AddLeaseCommodity)  // 添加商品
 		api.Get("/rent/list", shop.GetLeaseCommodity)  // 商品列表
 		api.Get("/rent/{ID:uint}", shop.GetShopDetail) // 商品详情
+		api.Get("/order/all", shop.GetAllOrderPage)    // 商品详情
 
 		// 租赁地址
 		api.Post("/address/lease/add/{ID:uint}", shop.AddLeaseAddress)
