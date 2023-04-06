@@ -25,7 +25,7 @@ func GetAllOrderPage(ctx iris.Context) {
 	app.OK(ctx, result, "添加成功")
 }
 
-/*GetMerchantOrder
+/*GetMerchantOrderCount
 * @Description: 商家累计订单数
 * @param ctx
 * @return {}
@@ -56,4 +56,19 @@ func GetMerchantOrder(ctx iris.Context) {
 		return
 	}
 	app.OK(ctx, result, "添加成功")
+}
+
+/*GetBillList
+* @Description: 账单列表
+* @param ctx
+ */
+func GetBillList(ctx iris.Context) {
+	var bills shop.Bills
+
+	result, err := bills.GetAll()
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "查询成功")
 }

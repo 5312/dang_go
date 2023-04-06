@@ -47,19 +47,20 @@ type Shop struct {
 	ReturnAddress string `json:"return_address"  validate:"required"  gorm:"comment:归还地址;"`
 	// 其他
 	Sort   int    `json:"sort" gorm:"comment:排序"`
-	Type   int    `json:"type" gorm:"comment:类型"`
+	Type   int    `json:"type" gorm:"comment:发布类型 0活动 1租赁"`
 	Unit   string `json:"unit" gorm:"comment:单位"`
-	Status string `json:"status" gorm:"comment:商品状态:已上架|审核中|已下架|未通过|草稿箱"`
+	Status string `json:"status" gorm:"comment:商品状态:0已上架|1审核中|2已下架|3未通过|4草稿箱"`
 }
 
 /*AddLeaseShop
 * @Description: 添加租赁商品
 * @receiver s
  */
-func (s *Shop) AddLeaseShop() (id int, err error) {
+func (s *Shop) AddLeaseShop(relesetypes int) (id int, err error) {
 
 	validate = validator.New()
 	verr := validate.Struct(s)
+	s.Type = relesetypes
 	if verr != nil {
 		fmt.Printf("参数验证失败 %v -- \n", verr)
 		err = verr
@@ -80,10 +81,10 @@ func (s *Shop) AddLeaseShop() (id int, err error) {
 * @return list
 * @return err
  */
-func (s *Shop) GetMyShopList(userInfo *middleware.CustomClaims) (list []Shop, err error) {
+func (s *Shop) GetMyShopList(userInfo *middleware.CustomClaims, releseType int) (list []Shop, err error) {
 	table := database.DB.Model(&s)
 	fmt.Printf("userinof -- %v", userInfo.ID)
-	if err = table.Where("from_shops = ?", userInfo.ID).Order("sort").Find(&list).Error; err != nil {
+	if err = table.Where("type = ?", releseType).Where("from_shops = ?", userInfo.ID).Order("sort").Find(&list).Error; err != nil {
 		return
 	}
 

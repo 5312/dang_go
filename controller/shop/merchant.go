@@ -2,6 +2,7 @@ package shop
 
 import (
 	"dang_go/internal/model/shop"
+	"dang_go/middleware"
 	"dang_go/tools/app"
 	"github.com/kataras/iris/v12"
 )
@@ -103,4 +104,41 @@ func AddReturnAddress(ctx iris.Context) {
 		return
 	}
 	app.OK(ctx, update, "操作成功")
+}
+
+/*AddMerchantMan
+* @Description: 添加商家成员
+* @param ctx
+* @return {}
+ */
+func AddMerchantMan(ctx iris.Context) {
+	var params shop.MerchantMan
+	if err := ctx.ReadJSON(&params); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	res, err := params.Create(userInfo.ID)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, res, "添加成功")
+}
+
+/*GetMerchantMan
+* @Description: 成员列表
+* @param ctx
+ */
+func GetMerchantMan(ctx iris.Context) {
+	var params shop.MerchantMan
+
+	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	res, err := params.GetList(userInfo.ID)
+
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, res, "添加成功")
 }

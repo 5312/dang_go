@@ -18,4 +18,7 @@ ctrl + alt + / 注释
 ## 蚂蚁链 [GO SDK文档](https://antchain.antgroup.com/docs/11/160376#h2--go-sdk1)
 
 
-## 蚂蚁链twc可信存证
+## 蚂蚁链twc可信存
+
+
+`userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)`

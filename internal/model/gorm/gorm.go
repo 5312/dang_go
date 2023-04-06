@@ -12,13 +12,18 @@ func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		new(system.Menu),
 		new(system.User),
-		new(system.Member),      // 会员
-		new(shop.Merchant),      // 商家
-		new(shop.Shop),          // 上坪
-		new(shop.Category),      // 分类
+		new(system.Member), // 会员
+
+		new(shop.Merchant),    // 商家
+		new(shop.MerchantMan), // 商家成员
+		new(shop.Shop),        // 上坪
+		new(shop.Category),    // 分类
+		new(shop.Order),       // 订单
+		new(shop.Bills),       // 账单
+
 		new(promoter.Promoter),  // 推广商
 		new(promoter.Personnel), // 推广员
-		new(shop.Order),         // 订单
+
 		// 小程序
 		new(applets.HomeImg),          // banner图
 		new(applets.RecommendProduct), // 推荐

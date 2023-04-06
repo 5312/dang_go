@@ -53,7 +53,7 @@ func (o *Order) Create(memberId uint) (id int, err error) {
 func (o *Order) GetOrderDetail(id uint) (list Order, err error) {
 	table := database.DB.Model(&o)
 
-	res := table.Debug().Where("id = ?", id).Find(&list)
+	res := table.Where("id = ?", id).Find(&list)
 	if res.Error != nil {
 		err = res.Error
 		return

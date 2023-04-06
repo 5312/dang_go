@@ -1,6 +1,8 @@
 package public
 
 import (
+	"dang_go/internal/database"
+	"dang_go/internal/model/shop"
 	"dang_go/tools/app"
 	"fmt"
 	"github.com/kataras/iris/v12"
@@ -11,6 +13,10 @@ import (
 	"time"
 )
 
+/*UploadImage
+* @Description: 文件上传
+* @param ctx
+ */
 func UploadImage(ctx iris.Context) {
 	//获取上传文件的信息
 	file, info, err := ctx.FormFile("file")
@@ -58,4 +64,48 @@ func UploadImage(ctx iris.Context) {
 	} else {
 		app.OK(ctx, filepath.ToSlash(newFilePath), "文件上传成功")
 	}
+}
+
+/*Home
+* @Description: 首页统计(平台)
+* @param ctx
+ */
+func Home(ctx iris.Context) {
+	var merchant shop.Merchant // 商家
+	var shops shop.Shop        // 商品
+	var order shop.Order
+
+	var tableMerchants int64
+	database.DB.Model(&merchant).Count(&tableMerchants)
+	var tableShops int64
+	database.DB.Model(&shops).Count(&tableShops)
+	var onShelves int64
+	database.DB.Model(&shops).Where("status = 0").Count(&onShelves)
+	var offTheShelf int64
+	database.DB.Model(&shops).Where("status = 2").Count(&offTheShelf)
+	var tableOrder int64
+	database.DB.Model(&order).Count(&tableOrder)
+
+	count := map[string]interface{}{
+		"allMerchant": tableMerchants,
+		"allShops":    tableShops,
+		"allOrders":   tableOrder,
+		"onShelves":   onShelves,
+		"offTheShelf": offTheShelf,
+		"a":           0,
+		"b":           0,
+		"c":           0,
+		"d":           0,
+		"e":           0,
+		"f":           0,
+		"j":           0,
+		"h":           0,
+		"i":           0,
+		"g":           0,
+		"k":           0,
+		"l":           0,
+		"m":           0,
+		"n":           0,
+	}
+	app.OK(ctx, count, "")
 }

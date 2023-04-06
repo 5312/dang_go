@@ -21,7 +21,28 @@ func AddLeaseCommodity(ctx iris.Context) {
 	}
 	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
 	data.FromShops = userInfo.ID
-	result, err := data.AddLeaseShop()
+	result, err := data.AddLeaseShop(1)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, result, "添加成功")
+}
+
+/*AddReleaseLeaseCommodity
+* @Description: 添加活动商品
+* @param ctx
+ */
+func AddReleaseLeaseCommodity(ctx iris.Context) {
+	// 接收参数
+	var data shop.Shop
+	if err := ctx.ReadJSON(&data); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	data.FromShops = userInfo.ID
+	result, err := data.AddLeaseShop(0)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return
@@ -38,7 +59,23 @@ func GetLeaseCommodity(ctx iris.Context) {
 	//var userInfo middleware.CustomClaims
 	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
 	var list shop.Shop
-	rest, err := list.GetMyShopList(userInfo)
+	rest, err := list.GetMyShopList(userInfo, 1)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, rest, "请求成功")
+}
+
+/*GetReleaseLeaseCommodity
+* @Description: 我的活动商品
+* @param ctx
+ */
+func GetReleaseLeaseCommodity(ctx iris.Context) {
+	//var userInfo middleware.CustomClaims
+	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	var list shop.Shop
+	rest, err := list.GetMyShopList(userInfo, 0)
 	if err != nil {
 		app.Error(ctx, -1, err, "")
 		return

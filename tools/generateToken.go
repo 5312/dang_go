@@ -21,18 +21,6 @@ func GenerateToken(claims jwt.CustomClaims, users interface{}) (LoginResult, err
 	}
 
 	token, err := j.CreateToken(claims)
-	//userInfo := map[string]interface{}{
-	//	"id":   claims.ID,
-	//	"name": claims.Name,
-	//}
-
-	//	userInfo := map[string]interface{}{
-	//		"id":      user.ID,
-	//		"name":    user.Name,
-	//		"age":     user.Age,
-	//		"email":   user.Email,
-	//		"account": user.Account,
-	//	}
 
 	data := LoginResult{
 		User:  users,

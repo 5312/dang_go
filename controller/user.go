@@ -8,7 +8,6 @@ import (
 )
 
 // InsterUser
-//TODO: 账号 account 不能重复添加验证
 //TODO: 密码加密 使用bcrypt
 
 func InsterUser(ctx iris.Context) {

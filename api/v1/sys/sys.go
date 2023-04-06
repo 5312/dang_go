@@ -2,6 +2,7 @@ package sys
 
 import (
 	"dang_go/controller"
+	"dang_go/controller/public"
 	"github.com/kataras/iris/v12/core/router"
 )
 
@@ -20,6 +21,10 @@ func RegisterMenuRoute(v1 router.Party) {
 		// 用户
 		api.Post("/user/add", controller.InsterUser)
 		api.Get("/user/list", controller.GetListUser)
+	}
+	{
+		// 首页统计
+		api.Get("/home", public.Home)
 	}
 
 }
