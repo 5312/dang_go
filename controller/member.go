@@ -83,3 +83,40 @@ func SaveUpLngLat(ctx iris.Context) {
 	}
 	app.OK(ctx, result, "保存成功")
 }
+
+/*Address
+* @Description: 添加地址
+* @param ctx
+ */
+func Address(ctx iris.Context) {
+	// 获取参数
+	var params system.MemAddress
+	if err := ctx.ReadJSON(&params); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	// 插入数据
+	res, err := params.Create(userInfo.ID)
+
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, res, "保存成功")
+}
+
+/*AddressList
+* @Description: 获取地址
+* @param ctx
+ */
+func AddressList(ctx iris.Context) {
+	var address system.MemAddress
+	userInfo := ctx.Values().Get("claims").(*middleware.CustomClaims)
+	res, err := address.GetList(userInfo.ID)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, res, "")
+}

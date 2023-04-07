@@ -34,5 +34,7 @@ func RegisterAppLetsRoute(v1 router.Party) {
 		api.Get("/order/{OID:uint}/detail", pay.OrderDetail)   // 查看订单列表
 		api.Post("/order/{OID:uint}/cancel", pay.OrderCancel)  // 用户取消订单
 
+		api.Post("/decryptPhoneNum", conalipay.DecryptPhoneNum) // 手机号解密
+
 	}
 }

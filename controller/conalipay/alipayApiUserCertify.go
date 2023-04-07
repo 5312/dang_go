@@ -37,6 +37,35 @@ func AlipaySetup() (client *alipay.Client, err error) {
 	return
 }
 
+/*DecryptPhoneNum
+* @Description: 手机号解密
+* @param ctx
+ */
+func DecryptPhoneNum(ctx iris.Context) {
+	type Decry struct {
+		EncryptedData string
+	}
+	var phones Decry
+	if err := ctx.ReadJSON(&phones); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	// 解密支付宝开放数据
+	//    encryptedData:包括敏感数据在内的完整用户信息的加密数据
+	//    secretKey:AES密钥，支付宝管理平台配置
+	//    beanPtr:需要解析到的结构体指针
+	var secretKey = "GPiEZ1pCJXPeAy1iiMjaAw=="
+
+	phone := new(alipay.UserPhone)
+	err := alipay.DecryptOpenDataToStruct(phones.EncryptedData, secretKey, phone)
+	fmt.Printf("phoone%v", err)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	app.OK(ctx, phone, "")
+}
+
 type AuthParams struct {
 	IdCard string `json:"idCard"`
 	Name   string `json:"name"`

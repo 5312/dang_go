@@ -13,5 +13,11 @@ func RegisterMemberRoute(v1 router.Party) {
 	{
 		// 会员
 		api.Get("/list", controller.GetPage)
+
+		// 添加地址
+		api.Post("/address/add", controller.Address)
+		// 获取地址
+		api.Get("/address/list", controller.AddressList)
+
 	}
 }

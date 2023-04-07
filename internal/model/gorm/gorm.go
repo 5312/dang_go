@@ -12,7 +12,8 @@ func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		new(system.Menu),
 		new(system.User),
-		new(system.Member), // 会员
+		new(system.Member),     // 会员
+		new(system.MemAddress), // 会员地址
 
 		new(shop.Merchant),    // 商家
 		new(shop.MerchantMan), // 商家成员
