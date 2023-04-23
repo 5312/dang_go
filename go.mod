@@ -9,14 +9,16 @@ require (
 	github.com/go-pay/gopay v1.5.91
 	github.com/go-playground/validator/v10 v10.12.0
 	github.com/gogf/gf v1.16.9
+	github.com/google/uuid v1.3.0
 	github.com/kataras/iris/v12 v12.2.0-beta6
 	github.com/spf13/viper v1.13.0
 	github.com/swaggo/swag v1.8.10
+	gitlab.alipay-inc.com/antchain/restclient-go-sdk v1.0.0
 	gorm.io/driver/mysql v1.4.3
 	gorm.io/gorm v1.24.1
-	gitlab.alipay-inc.com/antchain/restclient-go-sdk v1.0.0
 )
-replace gitlab.alipay-inc.com/antchain/restclient-go-sdk =>  F:/Monorepo/dang_go/SDK/restclient-go-sdk
+
+replace gitlab.alipay-inc.com/antchain/restclient-go-sdk => F:/Monorepo/dang_go/SDK/restclient-go-sdk
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
@@ -44,7 +46,6 @@ require (
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/iris-contrib/schema v0.0.6 // indirect

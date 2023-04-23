@@ -4,6 +4,7 @@ import (
 	"dang_go/api/v1/apialipay"
 	"dang_go/api/v1/public"
 	"dang_go/api/v1/sys"
+	"dang_go/api/v1/windControl"
 	"dang_go/controller"
 	_ "dang_go/docs"
 	"github.com/kataras/iris/v12"
@@ -33,6 +34,9 @@ func InitSysRouter(app *iris.Application) {
 		apialipay.RegisterAppLetsRoute(v1)      // banner图
 		//公共接口
 		public.RegisterPublicRoute(v1) // 文件上传
+		// 风控
+		windControl.RegisterRisk(v1)
+
 	}
 
 }
