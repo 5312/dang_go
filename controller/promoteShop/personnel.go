@@ -1,6 +1,7 @@
 package promoteShop
 
 import (
+	"dang_go/controller/conalipay"
 	"dang_go/internal/model/promoter"
 	"dang_go/middleware"
 	"dang_go/tools/app"
@@ -84,4 +85,42 @@ func UpToPromotePersonnel(ctx iris.Context) {
 		return
 	}
 	app.OK(ctx, result, "修改成功")
+}
+
+type Params struct {
+	UrlParam   string `json:"url_param"`
+	QueryParam string `json:"query_param"`
+	Describe   string `json:"describe"`
+	Size       string `json:"size"`
+}
+
+/*CreateQrCode
+* @Description: 生成推广链接
+* @param ctx
+ */
+func CreateQrCode(ctx iris.Context) {
+	// 接收参数
+	var data Params
+	if err := ctx.ReadJSON(&data); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	client, err := conalipay.AlipaySetup()
+	if err != nil {
+		return
+	}
+	bizContent := make(map[string]interface{})
+
+	bizContent["url_param"] = data.UrlParam
+	bizContent["query_param"] = data.QueryParam
+	bizContent["describe"] = data.Describe
+	bizContent["size"] = data.Size
+
+	res, err := client.OpenAppQrcodeCreate(ctx, bizContent)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+
+	app.OK(ctx, res, "")
 }

@@ -1,6 +1,7 @@
 package pay
 
 import (
+	"dang_go/controller/conalipay"
 	"dang_go/internal/model/shop"
 	"dang_go/middleware"
 	"dang_go/tools/app"
@@ -22,6 +23,98 @@ func Init(ctx iris.Context) {
 
 	fmt.Printf("oid%v \n", oid)
 	fmt.Printf("rid:%v \n", rid)
+}
+
+type AuthParams struct {
+	OutTradeNo  string `json:"out_trade_no"`
+	TotalAmount string `json:"total_amount"`
+	Subject     string `json:"subject"`
+	BuyerId     string `json:"buyer_id"`
+}
+
+type FreeParams struct {
+	OutTradeNo     string `json:"out_trade_no"`
+	OutRequestNo   string `json:"out_request_no"`
+	OrderTitle     string `json:"order_title"`
+	Amount         int    `json:"amount"`
+	ProductCode    string `json:"product_code"`
+	PayeeUserId    string `json:"payee_user_id"`
+	TimeoutExpress string `json:"timeout_express"`
+}
+
+/*Freeze
+* @Description: 生成资金冻结订单
+* @param ctx
+ */
+func Freeze(ctx iris.Context) {
+
+	var userData FreeParams
+	if err := ctx.ReadJSON(&userData); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+
+	client, err := conalipay.AlipaySetup()
+	if err != nil {
+		return
+	}
+	bizContent := make(map[string]interface{})
+
+	bizContent["out_trade_no"] = userData.OutRequestNo //"outOrderNo123"
+	bizContent["out_request_no"] = userData.OutRequestNo
+	bizContent["order_title"] = userData.OrderTitle
+	bizContent["amount"] = userData.Amount
+	bizContent["product_code"] = userData.ProductCode
+	bizContent["payee_user_id"] = userData.PayeeUserId
+	bizContent["timeout_express"] = userData.TimeoutExpress
+
+	result, err := client.FundAuthOrderAppFreeze(ctx, bizContent)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+
+	app.OK(ctx, result, "")
+}
+
+/*Trade
+* @Description: 统一收单交易接口
+* @param ctx
+ */
+func Trade(ctx iris.Context) {
+
+	var userData AuthParams
+	if err := ctx.ReadJSON(&userData); err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+	json := SetBizContent(userData)
+
+	client, err := conalipay.AlipaySetup()
+	if err != nil {
+		return
+	}
+	result, err := client.TradeCreate(ctx, json)
+	if err != nil {
+		app.Error(ctx, -1, err, "")
+		return
+	}
+
+	app.OK(ctx, result, "")
+}
+
+/*SetBizContent
+* @Description: 构造初始化入参
+ */
+func SetBizContent(user AuthParams) map[string]interface{} {
+	// 构造传递参数
+	bizContent := make(map[string]interface{})
+
+	bizContent["out_trade_no"] = user.OutTradeNo
+	bizContent["total_amount"] = user.TotalAmount
+	bizContent["subject"] = user.Subject
+	bizContent["buyer_id"] = user.BuyerId
+	return bizContent
 }
 
 /*SaveOrder
@@ -97,3 +190,10 @@ func OrderCancel(ctx iris.Context) {
 	}
 	app.OK(ctx, result, "取消成功")
 }
+
+/*OrderSync
+* @Description: 订单数据同步接口
+* @param ctx
+* @return {}
+ */
+func OrderSync(ctx iris.Context) {}

@@ -27,6 +27,8 @@ func RegisterPromoterRoute(v1 router.Party) {
 		promoter.Delete("/{ID:uint}", promoteShop.DeleteToPromotePersonnel) // 删除推广员
 		promoter.Put("/{ID:uint}", promoteShop.UpToPromotePersonnel)        // 修改推广员
 
+		api.Post("/qrcode", promoteShop.CreateQrCode) // 推广二维码
+
 	}
 	// 订单
 	{
